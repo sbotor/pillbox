@@ -16,14 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             PillBoxTheme {
-                val viewModel: MedicationsViewModel by viewModels()
-                MedicationList(
-                    medications = listOf(
-                        Medication(1, "med1"),
-                        Medication(2, "med2"),
-                        Medication(3, "med3")
-                    )
-                )
+                MedicationList()
             }
         }
     }
