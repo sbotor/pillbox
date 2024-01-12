@@ -5,7 +5,12 @@ import androidx.room.RoomDatabase
 import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.MedicationDao
 
-@Database(entities = [Medication::class], version = 1)
+@Database(entities = [Medication::class], version = AppDatabase.VERSION)
 abstract class AppDatabase : RoomDatabase() {
+    companion object {
+        const val DEFAULT_NAME = "database"
+        const val VERSION = 1
+    }
+
     abstract fun medicationDao(): MedicationDao
 }

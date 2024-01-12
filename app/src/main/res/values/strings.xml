@@ -1,5 +1,17 @@
 <resources>
     <string name="app_name">Pill Box</string>
+
+    <string name="search">Wyszukaj</string>
+    <string name="close">Zamknij</string>
+
+    <string name="validation_required">Pole wymagane</string>
+    <string name="validation_min_length">Minimalna liczba znaków to</string>
+    <string name="validation_max_length">Maksymalna liczba znaków to</string>
+
     <string name="medications_list_title">Leki</string>
     <string name="add_medication_desc">Dodaj nowy lek</string>
+    <string name="medication_name">Nazwa leku</string>
+    <string name="medication_description">Opis leku</string>
+    <string name="medication_dosage">Dawkowanie</string>
+    <string name="add_medication">Dodaj lek</string>
 </resources>
