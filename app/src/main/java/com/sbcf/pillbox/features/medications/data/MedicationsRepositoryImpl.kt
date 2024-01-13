@@ -13,4 +13,10 @@ class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationD
     override suspend fun createMedication(medication: Medication) {
         dao.insert(medication)
     }
+
+    override suspend fun getMedication(id: Int): Medication? = dao.get(id)
+
+    override suspend fun updateMedication(medication: Medication) {
+        dao.update(medication)
+    }
 }

@@ -3,6 +3,10 @@
 
     <string name="search">Wyszukaj</string>
     <string name="close">Zamknij</string>
+    <string name="back">Wróć</string>
+    <string name="edit">Edytuj</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
 
     <string name="validation_required">Pole wymagane</string>
     <string name="validation_min_length">Minimalna liczba znaków to</string>
@@ -13,5 +17,7 @@
     <string name="medication_name">Nazwa leku</string>
     <string name="medication_description">Opis leku</string>
     <string name="medication_dosage">Dawkowanie</string>
+    <string name="medication_dosage_placeholder">Opcjonalny opis dawkowania leku</string>
     <string name="add_medication">Dodaj lek</string>
+    <string name="medication_details">Dane leku</string>
 </resources>

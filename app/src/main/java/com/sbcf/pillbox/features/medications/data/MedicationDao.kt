@@ -3,6 +3,7 @@ package com.sbcf.pillbox.features.medications.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 
 @Dao
@@ -12,4 +13,10 @@ interface MedicationDao {
 
     @Insert
     suspend fun insert(medication: Medication)
+
+    @Query("SELECT * FROM Medication WHERE id = :id")
+    suspend fun get(id: Int): Medication?
+
+    @Update
+    suspend fun update(medication: Medication)
 }

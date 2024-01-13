@@ -1,6 +1,5 @@
 package com.sbcf.pillbox.features.medications.screens
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,17 +17,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.SearchField
 import com.sbcf.pillbox.features.medications.components.MedicationListItem
+import com.sbcf.pillbox.features.medications.models.MedicationOverview
+import com.sbcf.pillbox.utils.Dimens
+import com.sbcf.pillbox.utils.Modifiers
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationListScreen(
-    vm: MedicationListViewModel = viewModel()
+    onAddMedicationClick: () -> Unit,
+    onItemClick: (MedicationOverview) -> Unit,
+    vm: MedicationListViewModel = hiltViewModel(),
 ) {
     vm.fetchMedications()
 
@@ -51,7 +54,7 @@ fun MedicationListScreen(
                     onClose = vm::stopSearching,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp)
+                        .padding(Dimens.PaddingSmall)
                 )
             } else {
                 IconButton(onClick = { vm.searchByName() }) {
@@ -60,7 +63,7 @@ fun MedicationListScreen(
                         contentDescription = stringResource(id = R.string.search)
                     )
                 }
-                IconButton(onClick = { }) {
+                IconButton(onClick = onAddMedicationClick) {
                     Icon(
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_medication_desc)
@@ -71,12 +74,10 @@ fun MedicationListScreen(
     }) { padding ->
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
+            modifier = Modifiers.scaffoldedContent(padding)
         ) {
             items(vm.medications) {
-                MedicationListItem(medication = it)
+                MedicationListItem(medication = it, onClick = onItemClick)
             }
         }
     }

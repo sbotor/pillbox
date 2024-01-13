@@ -35,6 +35,11 @@ class InputValidationState(private val validators: List<ValidatorFn>) {
         return updateState(true, null)
     }
 
+    fun reset() {
+        markAsDirty(false)
+        updateState(true, null)
+    }
+
     private fun updateState(isValid: Boolean, error: String?): String? {
         this.isValid = isValid
         this.error = error

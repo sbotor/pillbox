@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.MedicationsRepository
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicationListViewModel @Inject constructor(private val repo: MedicationsRepository) :
     ViewModel() {
-    private var _medications = listOf<MedicationOverview>()
+    private var allMedications = listOf<MedicationOverview>()
 
     var medications by mutableStateOf(listOf<MedicationOverview>())
         private set
@@ -26,8 +25,8 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
 
     fun fetchMedications() {
         viewModelScope.launch {
-            _medications = repo.getAllMedications()
-            medications = _medications
+            allMedications = repo.getAllMedications()
+            medications = allMedications
         }
     }
 
@@ -36,14 +35,16 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         textFilter = text
 
         if (textFilter.isEmpty()) {
-            medications = _medications
+            medications = allMedications
             return
         }
 
         val trimmed = textFilter.trim()
 
-        medications = _medications.filter {
-            it.name.contains(textFilter, true) || it.name.contains(trimmed, true)
+        viewModelScope.launch {
+            medications = allMedications.filter {
+                it.name.contains(textFilter, true) || it.name.contains(trimmed, true)
+            }
         }
     }
 
