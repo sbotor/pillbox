@@ -19,4 +19,5 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
             return bundle.getInt(arguments[0].name)
         }
     }
+    data object Home : Screen("home")
 }
