@@ -11,7 +11,7 @@ import com.sbcf.pillbox.features.medications.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.features.medications.services.MedicationAlarmSchedulerImpl
 import com.sbcf.pillbox.features.medications.services.MedicationNotificationPublisher
 import com.sbcf.pillbox.features.medications.services.MedicationNotificationPublisherImpl
-import com.sbcf.pillbox.services.Clock
+import com.sbcf.pillbox.utils.Clock
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

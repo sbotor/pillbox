@@ -23,4 +23,7 @@
 
     <string name="medication_notification_channel_name">Przypomnienia o lekach</string>
     <string name="medication_notification_title">Czas na leki</string>
+
+    <string name="notifications_disabled">Powiadomienia są wyłączone</string>
+    <string name="enable_notifications">Włącz powiadomienia</string>
 </resources>

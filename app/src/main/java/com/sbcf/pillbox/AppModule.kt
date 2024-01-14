@@ -3,8 +3,8 @@ package com.sbcf.pillbox
 import android.content.Context
 import androidx.room.Room
 import com.sbcf.pillbox.data.AppDatabase
-import com.sbcf.pillbox.services.Clock
-import com.sbcf.pillbox.services.ClockImpl
+import com.sbcf.pillbox.utils.Clock
+import com.sbcf.pillbox.utils.ClockImpl
 import com.sbcf.pillbox.utils.validation.InputValidators
 import com.sbcf.pillbox.utils.validation.InputValidatorsImpl
 import dagger.Module

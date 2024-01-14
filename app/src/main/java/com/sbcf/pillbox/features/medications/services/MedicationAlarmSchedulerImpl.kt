@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
 import com.sbcf.pillbox.features.medications.data.MedicationNotification
 import com.sbcf.pillbox.features.medications.receivers.MedicationAlarmReceiver
-import com.sbcf.pillbox.services.Clock
+import com.sbcf.pillbox.utils.Clock
 import javax.inject.Inject
 
 class MedicationAlarmSchedulerImpl @Inject constructor(

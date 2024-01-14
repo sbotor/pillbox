@@ -7,5 +7,6 @@ interface MedicationNotificationsRepository {
     suspend fun updateMany(notifications: List<MedicationNotification>)
     suspend fun get(id: Int): MedicationNotification?
     suspend fun update(notification: MedicationNotification)
+    suspend fun getAll(): List<MedicationNotification>
 }
 

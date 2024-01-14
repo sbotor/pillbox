@@ -24,7 +24,7 @@ import com.sbcf.pillbox.components.SearchField
 import com.sbcf.pillbox.features.medications.components.MedicationListItem
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.utils.Dimens
-import com.sbcf.pillbox.utils.Modifiers
+import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,7 +74,7 @@ fun MedicationListScreen(
     }) { padding ->
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifiers.scaffoldedContent(padding)
+            modifier = Modifier.scaffoldedContent(padding)
         ) {
             items(vm.medications) {
                 MedicationListItem(medication = it, onClick = onItemClick)
