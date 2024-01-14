@@ -11,12 +11,23 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
     data object AddMedication : Screen("medications/add")
     data object MedicationDetails :
         Screen(
-            "medications/details/{medicationId}",
-            listOf(navArgument("medicationId") { type = NavType.IntType })
+            "medications/details/{medicationId}/{editable}",
+            listOf(
+                navArgument("medicationId") { type = NavType.IntType },
+                navArgument("editable") { type = NavType.BoolType })
         ) {
-        fun createRoute(medicationId: Int) = "medications/details/$medicationId"
+        fun createRoute(medicationId: Int, initiallyEditable: Boolean) =
+            "medications/details/$medicationId/$initiallyEditable"
+
         fun getMedicationId(bundle: Bundle): Int {
             return bundle.getInt(arguments[0].name)
         }
+
+        fun getEditable(bundle: Bundle): Boolean {
+            return bundle.getBoolean(arguments[1].name)
+        }
     }
+
+    data object Home : Screen("home")
+    data object Medication : Screen("medication") //TODO: better route?
 }

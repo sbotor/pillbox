@@ -22,7 +22,7 @@ class MedicationNotificationPublisherImpl @Inject constructor(
         }
 
         val androidNotification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_medication_24)
+            .setSmallIcon(R.drawable.medication_24)
             .setContentTitle(context.getString(R.string.medication_notification_title))
             .setContentText(notification.title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)

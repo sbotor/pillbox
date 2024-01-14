@@ -28,13 +28,14 @@ import com.sbcf.pillbox.utils.Length
 @Composable
 fun MedicationDetailsScreen(
     medicationId: Int,
+    initiallyEditable: Boolean,
     vm: MedicationFormViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {}
 ) = MedicationFormScreen(
     vm,
     onBackClick,
     onSaveClick = { vm.saveMedication(callback = { vm.toggleEditing() }) }) {
-    vm.fetchMedication(medicationId)
+    vm.fetchMedication(medicationId, initiallyEditable)
 }
 
 @Composable

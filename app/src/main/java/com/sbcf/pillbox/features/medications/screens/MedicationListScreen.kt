@@ -18,11 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.SearchField
 import com.sbcf.pillbox.features.medications.components.MedicationListItem
+import com.sbcf.pillbox.features.medications.components.MedicationListItemCallbacks
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
+import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
@@ -30,7 +31,8 @@ import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 @Composable
 fun MedicationListScreen(
     onAddMedicationClick: () -> Unit,
-    onItemClick: (MedicationOverview) -> Unit,
+    onItemOpenClick: (MedicationOverview) -> Unit,
+    onItemEditClick: (MedicationOverview) -> Unit,
     vm: MedicationListViewModel = hiltViewModel(),
 ) {
     vm.fetchMedications()
@@ -77,7 +79,11 @@ fun MedicationListScreen(
             modifier = Modifier.scaffoldedContent(padding)
         ) {
             items(vm.medications) {
-                MedicationListItem(medication = it, onClick = onItemClick)
+                val callbacks = MedicationListItemCallbacks(
+                    onOpen = onItemOpenClick,
+                    onEdit = onItemEditClick,
+                    onRemoval = { vm.removeMedication(it.id) })
+                MedicationListItem(medication = it, callbacks = callbacks)
             }
         }
     }

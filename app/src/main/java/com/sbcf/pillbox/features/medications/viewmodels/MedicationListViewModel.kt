@@ -25,8 +25,7 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
 
     fun fetchMedications() {
         viewModelScope.launch {
-            allMedications = repo.getAllMedications()
-            medications = allMedications
+            fetchMedicationsCore()
         }
     }
 
@@ -35,7 +34,7 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         textFilter = text
 
         if (textFilter.isEmpty()) {
-            medications = allMedications
+            medications = emptyList()
             return
         }
 
@@ -51,5 +50,18 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
     fun stopSearching() {
         isSearching = false
         textFilter = ""
+        medications = allMedications
+    }
+
+    fun removeMedication(medicationId: Int){
+        viewModelScope.launch {
+            repo.removeMedicationById(medicationId)
+            fetchMedicationsCore()
+        }
+    }
+
+    private suspend fun fetchMedicationsCore() {
+        allMedications = repo.getAllMedications()
+        medications = allMedications
     }
 }

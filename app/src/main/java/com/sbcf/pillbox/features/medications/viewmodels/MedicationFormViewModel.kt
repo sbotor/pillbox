@@ -58,13 +58,17 @@ class MedicationFormViewModel @Inject constructor(
         }
     }
 
-    fun fetchMedication(id: Int) {
+    fun fetchMedication(id: Int, enableEditing: Boolean = false) {
         isCreating = false
         isEditable = false
         viewModelScope.launch {
             val med = repo.getMedication(id)!!
             resetForm(med)
             medicationId = med.id
+
+            if (enableEditing) {
+                isEditable = true
+            }
         }
     }
 

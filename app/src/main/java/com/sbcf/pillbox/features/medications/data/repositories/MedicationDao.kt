@@ -20,4 +20,7 @@ interface MedicationDao {
 
     @Update
     suspend fun update(medication: Medication)
+
+    @Query("DELETE FROM Medication WHERE id = :medicationId")
+    suspend fun delete(medicationId: Int)
 }
