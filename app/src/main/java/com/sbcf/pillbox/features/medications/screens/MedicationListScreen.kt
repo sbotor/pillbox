@@ -18,11 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.SearchField
 import com.sbcf.pillbox.features.medications.components.MedicationListItem
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
+import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers
 
@@ -77,7 +77,7 @@ fun MedicationListScreen(
             modifier = Modifiers.scaffoldedContent(padding)
         ) {
             items(vm.medications) {
-                MedicationListItem(medication = it, onClick = onItemClick)
+                MedicationListItem(medication = it, onClick = onItemClick, onLongClick = vm::removeMedication)
             }
         }
     }

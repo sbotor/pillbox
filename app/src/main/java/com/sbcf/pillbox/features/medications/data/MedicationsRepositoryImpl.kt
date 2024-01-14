@@ -19,4 +19,8 @@ class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationD
     override suspend fun updateMedication(medication: Medication) {
         dao.update(medication)
     }
+
+    override suspend fun removeMedicationById(medicationId: Int) {
+        dao.delete(medicationId)
+    }
 }

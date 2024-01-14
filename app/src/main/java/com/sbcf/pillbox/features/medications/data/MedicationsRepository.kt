@@ -7,4 +7,5 @@ interface MedicationsRepository {
     suspend fun createMedication(medication: Medication)
     suspend fun getMedication(id: Int): Medication?
     suspend fun updateMedication(medication: Medication)
+    suspend fun removeMedicationById(medicationId: Int)
 }
