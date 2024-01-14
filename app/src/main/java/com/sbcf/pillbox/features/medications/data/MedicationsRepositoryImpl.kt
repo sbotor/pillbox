@@ -6,7 +6,6 @@ import javax.inject.Inject
 class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationDao) :
     MedicationsRepository {
     override suspend fun getAllMedications(): List<MedicationOverview> {
-        //return List(100) { MedicationOverview(it, "Lek #$it") }
         return dao.getAll()
     }
 

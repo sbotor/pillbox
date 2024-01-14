@@ -18,8 +18,8 @@ fun TextInput(
     TextField(
         value = state.value,
         onValueChange = {
+            state.validation.markAsDirty()
             if (maxLength == null || it.length <= maxLength) {
-                state.validation.markAsDirty()
                 state.validation.validate(it)
                 state.value = it
             }
