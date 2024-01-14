@@ -6,7 +6,5 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.ui.Modifier
 
 object Modifiers {
-    fun scaffoldedContent(padding: PaddingValues) = Modifier
-        .fillMaxSize()
-        .padding(padding)
+    fun Modifier.scaffoldedContent(padding: PaddingValues) = fillMaxSize().padding(padding)
 }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medications.data.Medication
-import com.sbcf.pillbox.features.medications.data.MedicationsRepository
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
 import com.sbcf.pillbox.utils.Length
 import com.sbcf.pillbox.utils.validation.InputState
 import com.sbcf.pillbox.utils.validation.InputValidationState
@@ -58,13 +58,17 @@ class MedicationFormViewModel @Inject constructor(
         }
     }
 
-    fun fetchMedication(id: Int) {
+    fun fetchMedication(id: Int, enableEditing: Boolean = false) {
         isCreating = false
         isEditable = false
         viewModelScope.launch {
             val med = repo.getMedication(id)!!
             resetForm(med)
             medicationId = med.id
+
+            if (enableEditing) {
+                isEditable = true
+            }
         }
     }
 

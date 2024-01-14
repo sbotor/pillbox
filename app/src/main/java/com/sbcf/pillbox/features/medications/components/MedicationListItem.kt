@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,29 +23,41 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.utils.Dimens
 
+data class MedicationListItemCallbacks(
+    val onOpen: (MedicationOverview) -> Unit,
+    val onEdit: (MedicationOverview) -> Unit,
+    val onRemoval: (MedicationOverview) -> Unit
+)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicationListItem(
     medication: MedicationOverview,
-    onClick: (MedicationOverview) -> Unit,
-    onLongClick: (Int) -> Unit
+    callbacks: MedicationListItemCallbacks,
 ) {
-
-    var expanded by remember { mutableStateOf(false) }
+    var menuExpanded by remember { mutableStateOf(false) }
     var removalAlert by remember { mutableStateOf(false) }
 
-    when{
+    when {
         removalAlert -> {
             MedicationRemovalDialog(
-                onConfirmation = onLongClick,
-                onDismissRequest = {removalAlert = false; expanded = false},
-                medication = medication)
+                onConfirmation = {
+                    callbacks.onRemoval(medication)
+                    removalAlert = false
+
+                },
+                onDismissRequest = {
+                    removalAlert = false
+                },
+                medication = medication
+            )
         }
     }
 
@@ -52,8 +65,8 @@ fun MedicationListItem(
         modifier = Modifier
             .fillMaxWidth(0.9f)
             .combinedClickable(
-                onClick = { onClick(medication) },
-                onLongClick = { expanded = true }
+                onClick = { callbacks.onOpen(medication) },
+                onLongClick = { menuExpanded = true }
             )
     ) {
         Row(
@@ -63,6 +76,11 @@ fun MedicationListItem(
                 .fillMaxSize()
                 .padding(Dimens.PaddingNormal)
         ) {
+            Icon(
+                painter = painterResource(id = R.drawable.medication_24),
+                contentDescription = null,
+                modifier = Modifier.padding(end = Dimens.PaddingSmall)
+            )
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(text = medication.name, style = MaterialTheme.typography.headlineSmall)
                 if (medication.dosage.isNotEmpty()) {
@@ -70,21 +88,26 @@ fun MedicationListItem(
                 }
             }
         }
-
         DropdownMenu(
-        expanded = expanded,
-        onDismissRequest = { expanded = false }
+            expanded = menuExpanded,
+            onDismissRequest = { menuExpanded = false }
         ) {
-        DropdownMenuItem(
-            text = {  Text(stringResource(id = R.string.edit)) },
-            onClick = { onClick(medication) }
-        )
-        DropdownMenuItem(
-            text = {  Text(stringResource(id = R.string.delete)) },
-            onClick = { removalAlert = true }
-        )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.edit)) },
+                onClick = {
+                    callbacks.onEdit(medication)
+                    menuExpanded = false
+                }
+            )
+            DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.delete)) },
+                onClick = {
+                    removalAlert = true
+                    menuExpanded = false
+                }
+            )
 
-    }
+        }
     }
     Spacer(
         modifier = Modifier

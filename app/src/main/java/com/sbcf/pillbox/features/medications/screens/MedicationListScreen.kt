@@ -21,16 +21,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.SearchField
 import com.sbcf.pillbox.features.medications.components.MedicationListItem
+import com.sbcf.pillbox.features.medications.components.MedicationListItemCallbacks
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
 import com.sbcf.pillbox.utils.Dimens
-import com.sbcf.pillbox.utils.Modifiers
+import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MedicationListScreen(
     onAddMedicationClick: () -> Unit,
-    onItemClick: (MedicationOverview) -> Unit,
+    onItemOpenClick: (MedicationOverview) -> Unit,
+    onItemEditClick: (MedicationOverview) -> Unit,
     vm: MedicationListViewModel = hiltViewModel(),
 ) {
     vm.fetchMedications()
@@ -74,10 +76,14 @@ fun MedicationListScreen(
     }) { padding ->
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifiers.scaffoldedContent(padding)
+            modifier = Modifier.scaffoldedContent(padding)
         ) {
             items(vm.medications) {
-                MedicationListItem(medication = it, onClick = onItemClick, onLongClick = vm::removeMedication)
+                val callbacks = MedicationListItemCallbacks(
+                    onOpen = onItemOpenClick,
+                    onEdit = onItemEditClick,
+                    onRemoval = { vm.removeMedication(it.id) })
+                MedicationListItem(medication = it, callbacks = callbacks)
             }
         }
     }

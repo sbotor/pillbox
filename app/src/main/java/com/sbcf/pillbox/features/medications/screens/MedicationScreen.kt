@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medications.viewmodels.MedicationViewModel
-import com.sbcf.pillbox.utils.Modifiers
+import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +36,7 @@ fun MedicationScreen(
     ) { padding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifiers.scaffoldedContent(padding)
+            modifier = Modifier.scaffoldedContent(padding)
         ) {
 
             Button(

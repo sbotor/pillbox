@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbcf.pillbox.features.medications.data.MedicationsRepository
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -25,8 +25,7 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
 
     fun fetchMedications() {
         viewModelScope.launch {
-            allMedications = repo.getAllMedications()
-            medications = allMedications
+            fetchMedicationsCore()
         }
     }
 
@@ -35,7 +34,7 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         textFilter = text
 
         if (textFilter.isEmpty()) {
-            medications = allMedications
+            medications = emptyList()
             return
         }
 
@@ -51,12 +50,18 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
     fun stopSearching() {
         isSearching = false
         textFilter = ""
+        medications = allMedications
     }
 
     fun removeMedication(medicationId: Int){
         viewModelScope.launch {
             repo.removeMedicationById(medicationId)
+            fetchMedicationsCore()
         }
-        fetchMedications()
+    }
+
+    private suspend fun fetchMedicationsCore() {
+        allMedications = repo.getAllMedications()
+        medications = allMedications
     }
 }

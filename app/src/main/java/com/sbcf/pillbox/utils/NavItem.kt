@@ -1,6 +1,7 @@
-package com.sbcf.pillbox.screens
+package com.sbcf.pillbox.utils
 
 import com.sbcf.pillbox.R
+import com.sbcf.pillbox.screens.Screen
 
 
 sealed class NavItem(

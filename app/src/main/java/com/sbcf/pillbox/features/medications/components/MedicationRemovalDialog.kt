@@ -10,7 +10,7 @@ import com.sbcf.pillbox.features.medications.models.MedicationOverview
 
 @Composable
 fun MedicationRemovalDialog(
-    onConfirmation: (Int) -> Unit,
+    onConfirmation: () -> Unit,
     onDismissRequest: () -> Unit,
     medication: MedicationOverview
 ) {
@@ -19,6 +19,7 @@ fun MedicationRemovalDialog(
             Text(text = stringResource(id = R.string.mediaction_removal))
         },
         text = {
+            // TODO
             Text(text = "Czy na pewno chcesz usunąć lek '${medication.name}'?")
         },
         onDismissRequest = {
@@ -26,18 +27,14 @@ fun MedicationRemovalDialog(
         },
         confirmButton = {
             TextButton(
-                onClick = {
-                    onConfirmation(medication.id)
-                }
+                onClick = onConfirmation
             ) {
                 Text(stringResource(id = R.string.delete))
             }
         },
         dismissButton = {
             TextButton(
-                onClick = {
-                    onDismissRequest()
-                }
+                onClick = onDismissRequest
             ) {
                 Text(stringResource(id = R.string.cancel))
             }

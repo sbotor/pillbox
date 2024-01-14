@@ -7,15 +7,13 @@ import androidx.compose.runtime.setValue
 class InputValidationState(private val validators: List<ValidatorFn>) {
     constructor(vararg validators: ValidatorFn) : this(validators.toList())
 
-    var isDirty by mutableStateOf(false)
-        private set
+    private var isDirty = false
 
     var error: String? by mutableStateOf(null)
         private set
-
     var isValid by mutableStateOf(true)
         private set
-
+    
     fun markAsDirty(value: Boolean = true) {
         isDirty = value
     }
