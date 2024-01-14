@@ -52,4 +52,11 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         isSearching = false
         textFilter = ""
     }
+
+    fun removeMedication(medicationId: Int){
+        viewModelScope.launch {
+            repo.removeMedicationById(medicationId)
+        }
+        fetchMedications()
+    }
 }
