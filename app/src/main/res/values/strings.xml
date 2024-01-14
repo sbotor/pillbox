@@ -25,4 +25,5 @@
     <string name="home_page">Strona główna</string>
     <string name="medication">Leki</string>
     <string name="alarms">Alarmy</string>
+    <string name="mediaction_removal">Usuwanie leku</string>
 </resources>

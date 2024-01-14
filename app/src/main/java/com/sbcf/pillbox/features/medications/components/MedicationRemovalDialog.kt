@@ -16,7 +16,7 @@ fun MedicationRemovalDialog(
 ) {
     AlertDialog(
         title = {
-            Text(text = "Usuwanie leku")
+            Text(text = stringResource(id = R.string.mediaction_removal))
         },
         text = {
             Text(text = "Czy na pewno chcesz usunąć lek '${medication.name}'?")

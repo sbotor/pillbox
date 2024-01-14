@@ -51,7 +51,6 @@ fun MedicationListItem(
     Card(
         modifier = Modifier
             .fillMaxWidth(0.9f)
-            //.clickable { onClick(medication) }
             .combinedClickable(
                 onClick = { onClick(medication) },
                 onLongClick = { expanded = true }
