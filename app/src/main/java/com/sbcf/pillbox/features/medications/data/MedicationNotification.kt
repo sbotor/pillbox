@@ -6,5 +6,5 @@ data class MedicationNotification(
     val hour: Int,
     val minute: Int,
     var lastScheduleTimestamp: Long,
-    val lastDeliveredTimestamp: Long
+    var lastDeliveredTimestamp: Long
 )

@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbcf.pillbox.features.medications.data.MedicationsRepository
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

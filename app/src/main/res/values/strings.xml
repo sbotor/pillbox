@@ -20,4 +20,7 @@
     <string name="medication_dosage_placeholder">Opcjonalny opis dawkowania leku</string>
     <string name="add_medication">Dodaj lek</string>
     <string name="medication_details">Dane leku</string>
+
+    <string name="medication_notification_channel_name">Przypomnienia o lekach</string>
+    <string name="medication_notification_title">Czas na leki</string>
 </resources>

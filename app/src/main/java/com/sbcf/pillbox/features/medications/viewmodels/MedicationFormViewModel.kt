@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medications.data.Medication
-import com.sbcf.pillbox.features.medications.data.MedicationsRepository
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
 import com.sbcf.pillbox.utils.Length
 import com.sbcf.pillbox.utils.validation.InputState
 import com.sbcf.pillbox.utils.validation.InputValidationState

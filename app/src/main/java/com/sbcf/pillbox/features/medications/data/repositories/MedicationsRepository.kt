@@ -1,5 +1,6 @@
-package com.sbcf.pillbox.features.medications.data
+package com.sbcf.pillbox.features.medications.data.repositories
 
+import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 
 interface MedicationsRepository {
@@ -8,3 +9,4 @@ interface MedicationsRepository {
     suspend fun getMedication(id: Int): Medication?
     suspend fun updateMedication(medication: Medication)
 }
+

@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
-import com.sbcf.pillbox.features.medications.data.MedicationNotificationsRepository
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationNotificationsRepository
 import com.sbcf.pillbox.features.medications.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.screens.PillBoxApp
 import com.sbcf.pillbox.ui.theme.PillBoxTheme

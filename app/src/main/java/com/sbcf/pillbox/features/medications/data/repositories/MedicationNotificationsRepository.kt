@@ -1,4 +1,6 @@
-package com.sbcf.pillbox.features.medications.data
+package com.sbcf.pillbox.features.medications.data.repositories
+
+import com.sbcf.pillbox.features.medications.data.MedicationNotification
 
 interface MedicationNotificationsRepository {
     suspend fun getDue(scheduledBefore: Long): List<MedicationNotification>
@@ -6,3 +8,4 @@ interface MedicationNotificationsRepository {
     suspend fun get(id: Int): MedicationNotification?
     suspend fun update(notification: MedicationNotification)
 }
+
