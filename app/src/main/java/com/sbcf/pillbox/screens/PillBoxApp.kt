@@ -10,6 +10,7 @@ import com.sbcf.pillbox.features.medications.screens.AddMedicationScreen
 import com.sbcf.pillbox.features.medications.screens.HomeScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationDetailsScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationListScreen
+import com.sbcf.pillbox.features.medications.screens.MedicationScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -37,9 +38,10 @@ fun PillBoxApp() {
                 AddMedicationScreen(onBackClick = { navController.navigateUp() })
             }
             composable(Screen.Home.route){
-                HomeScreen(
-
-                )
+                HomeScreen()
+            }
+            composable(Screen.Medication.route){
+                MedicationScreen(onMedicationClick = { navController.navigate(Screen.MedicationList.route) })
             }
         }
     }

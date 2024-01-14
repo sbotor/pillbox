@@ -20,4 +20,5 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
         }
     }
     data object Home : Screen("home")
+    data object Medication : Screen("medication") //TODO: better route?
 }

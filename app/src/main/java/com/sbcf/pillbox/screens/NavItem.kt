@@ -8,7 +8,6 @@ sealed class NavItem(
     val icon: Int,
     val route: String
 ) {
-
     data object Home: NavItem(
         R.string.home_page,
         R.drawable.home_24,
@@ -18,6 +17,6 @@ sealed class NavItem(
     data object  Medication: NavItem(
         R.string.medication,
         R.drawable.medication_24,
-        Screen.MedicationList.route
+        Screen.Medication.route
         )
 }
