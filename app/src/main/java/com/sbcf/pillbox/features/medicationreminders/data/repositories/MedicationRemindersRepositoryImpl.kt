@@ -4,10 +4,14 @@ import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import javax.inject.Inject
 
-class MedicationRemindersRepositoryImpl @Inject constructor(private val dao: MedicationReminderDao) :
+class MedicationRemindersRepositoryImpl @Inject constructor(
+    private val dao: MedicationReminderDao
+) :
     MedicationRemindersRepository {
-    override suspend fun getDue(scheduledBefore: Long): List<MedicationReminder> =
-        dao.getEnabledScheduledBefore(scheduledBefore)
+    override suspend fun invalidateAllAndGetEnabled(): List<MedicationReminder> {
+        dao.invalidateAll()
+        return dao.getAllEnabled()
+    }
 
     override suspend fun updateMany(reminders: List<MedicationReminder>) = dao.updateMany(reminders)
 
@@ -17,5 +21,6 @@ class MedicationRemindersRepositoryImpl @Inject constructor(private val dao: Med
 
     override suspend fun getAll(): List<MedicationReminderOverview> = dao.getAll()
 
-    override suspend fun changeStatus(id: Int, isEnabled: Boolean) = dao.changeStatus(id, isEnabled)
+    override suspend fun changeDeliveryTimestamp(id: Int, value: Long?) =
+        dao.changeDeliveryTimestamp(id, value)
 }

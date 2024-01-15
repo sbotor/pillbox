@@ -12,10 +12,11 @@ import javax.inject.Inject
 
 class MedicationReminderPublisherImpl @Inject constructor(
     private val context: Context,
-    private val clock: Clock
+    private val clock: Clock,
+    private val scheduler: MedicationAlarmScheduler
 ) :
     MedicationReminderPublisher {
-    override fun publish(notification: MedicationReminder) {
+    override fun publish(reminder: MedicationReminder) {
         val notificationManager = getManager()
         if (!notificationManager.areNotificationsEnabled()) {
             return
@@ -24,13 +25,29 @@ class MedicationReminderPublisherImpl @Inject constructor(
         val androidNotification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.medication_24)
             .setContentTitle(context.getString(R.string.medication_notification_title))
-            .setContentText(notification.title)
+            .setContentText(reminder.title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        notificationManager.notify(notification.id, androidNotification)
+        notificationManager.notify(reminder.id, androidNotification)
 
-        notification.lastDeliveredTimestamp = clock.now().timeInMillis
+        reminder.lastDeliveryTimestamp = clock.now().timeInMillis
+
+        val nextTimestamp = reminder.getEarliestNextTimestamp(clock.now())
+
+        if (nextTimestamp == null) {
+            reminder.disable()
+            return
+        }
+
+        reminder.enable(nextTimestamp)
+
+        try {
+            scheduler.schedule(reminder)
+        } catch (e: Exception) {
+            // TODO: We should probably do something
+            reminder.disable()
+        }
     }
 
     override fun ensureChannel() {
@@ -44,7 +61,7 @@ class MedicationReminderPublisherImpl @Inject constructor(
     }
 
     companion object {
-        private const val CHANNEL_ID = "PILLBOX_MEDICATION_NOTIFICATIONS"
+        private const val CHANNEL_ID = "com.sbcf.pillbox.MEDICATION_NOTIFICATIONS"
     }
 
     private fun getManager(): NotificationManager =

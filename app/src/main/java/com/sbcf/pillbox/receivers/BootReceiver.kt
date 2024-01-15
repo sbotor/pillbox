@@ -29,8 +29,7 @@ class BootReceiver : BroadcastReceiver() {
         }
 
         launchGlobalAsync {
-            // TODO: Possibly unnecessary to save the timestamp?
-            val notifications = repo.getDue(Long.MAX_VALUE)
+            val notifications = repo.invalidateAllAndGetEnabled()
             if (notifications.isEmpty()) {
                 return@launchGlobalAsync
             }

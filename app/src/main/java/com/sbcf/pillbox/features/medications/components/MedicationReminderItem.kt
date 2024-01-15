@@ -13,12 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sbcf.pillbox.components.ListItemSpacer
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderDayMask
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
 
 @Composable
 fun MedicationReminderItem() {
-    val reminder = MedicationReminderOverview(1, 12, 49, true)
+    val reminder = MedicationReminderOverview(1, 12, 49, null, ReminderDayMask())
 
     Card(modifier = Modifier.fillMaxWidth()) {
         Row(

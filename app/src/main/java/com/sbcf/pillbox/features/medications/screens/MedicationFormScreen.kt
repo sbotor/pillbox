@@ -1,6 +1,5 @@
 package com.sbcf.pillbox.features.medications.screens
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -64,9 +64,11 @@ fun AddMedicationScreen(
 private fun MedicationFormScreen(
     vm: MedicationFormViewModel = hiltViewModel(),
     callbacks: MedicationDetailsCallbacks,
-    onInit: () -> Unit
+    onInit: suspend () -> Unit
 ) {
-    onInit()
+    LaunchedEffect(key1 = vm, key2 = onInit, block = {
+        onInit()
+    })
 
     Scaffold(topBar = {
         TopAppBar(
@@ -88,10 +90,7 @@ private fun MedicationFormScreen(
                 MedicationFormActions(
                     isCreating = vm.isCreating,
                     isEditable = vm.isEditable,
-                    onSaveClick = {
-                        callbacks.onSaveClick()
-                        vm.invalidateCache()
-                    },
+                    onSaveClick = { callbacks.onSaveClick() },
                     onEditToggle = vm::toggleEditing
                 )
             })

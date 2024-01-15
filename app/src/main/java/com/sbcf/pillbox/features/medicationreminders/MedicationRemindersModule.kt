@@ -41,7 +41,8 @@ class MedicationRemindersModule {
     @Singleton
     fun provideMedicationNotificationPublisher(
         @ApplicationContext context: Context,
-        clock: Clock
+        clock: Clock,
+        scheduler: MedicationAlarmScheduler
     ): MedicationReminderPublisher =
-        MedicationReminderPublisherImpl(context, clock)
+        MedicationReminderPublisherImpl(context, clock, scheduler)
 }

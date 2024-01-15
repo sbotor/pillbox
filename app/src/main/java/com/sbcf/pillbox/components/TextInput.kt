@@ -1,7 +1,7 @@
 package com.sbcf.pillbox.components
 
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sbcf.pillbox.utils.validation.InputState
@@ -18,7 +18,7 @@ fun TextInput(
     val changeGuard: (String) -> Boolean =
         if (maxLength == null) { _ -> true } else { value -> value.length <= maxLength }
 
-    TextField(
+    OutlinedTextField(
         value = state.value,
         onValueChange = {
             state.validation.markAsDirty()

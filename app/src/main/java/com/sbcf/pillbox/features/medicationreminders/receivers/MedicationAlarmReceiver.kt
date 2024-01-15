@@ -36,7 +36,7 @@ class MedicationAlarmReceiver : BroadcastReceiver() {
     }
 
     companion object {
-        const val ACTION = "PILLBOX_NOTIFICATION_ALARM"
+        const val ACTION = "com.sbcf.pillbox.NOTIFICATION_ALARM"
 
         fun createData(notificationId: Int): Uri {
             return Uri.parse("content://medicationNotifications/$notificationId")
