@@ -15,13 +15,11 @@ import androidx.compose.ui.Modifier
 import com.sbcf.pillbox.components.ListItemSpacer
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
+import com.sbcf.pillbox.utils.Formatters
 
 @Composable
 fun MedicationReminderItem(reminder: MedicationReminderOverview) {
     Card(modifier = Modifier.fillMaxWidth()) {
-        if (reminder.title.isNotEmpty()) {
-            Text(text = reminder.title, modifier = Modifier.padding(Dimens.PaddingNormal))
-        }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -30,22 +28,29 @@ fun MedicationReminderItem(reminder: MedicationReminderOverview) {
                 .padding(Dimens.PaddingNormal)
         ) {
             Text(
-                text = "${reminder.hour}:${reminder.minute}",
+                text = Formatters.time(reminder.hour, reminder.minute),
                 style = MaterialTheme.typography.headlineMedium
             )
             Switch(checked = reminder.isEnabled, onCheckedChange = {})
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(Dimens.PaddingNormal)
-        ) {
-            for (day in reminder.days.getSetDays()) {
-                // TODO: localize this
-                Text(
-                    text = day.toString().take(2),
-                    modifier = Modifier.padding(horizontal = Dimens.PaddingSmall)
-                )
+        if (reminder.title.isNotEmpty()) {
+            Text(text = reminder.title, modifier = Modifier.padding(Dimens.PaddingNormal))
+        }
+
+        val setDays = reminder.days.getSetDays()
+        if (setDays.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.PaddingNormal)
+            ) {
+                for (day in setDays) {
+                    // TODO: localize this
+                    Text(
+                        text = day.toString().take(2),
+                        modifier = Modifier.padding(horizontal = Dimens.PaddingSmall)
+                    )
+                }
             }
         }
     }

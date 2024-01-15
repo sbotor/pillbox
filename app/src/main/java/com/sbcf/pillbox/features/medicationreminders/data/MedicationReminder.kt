@@ -43,14 +43,28 @@ class MedicationReminder {
             return null
         }
 
-        return getNextDayTimestamp(now)
+        return getRepeatingNextDayTimestamp(now)
     }
 
     fun getEarliestTimestamp(now: Calendar): Long? {
         val nextDelivery = nextDeliveryTimestamp ?: Long.MIN_VALUE
         val nowMs = now.timeInMillis
-        if (nowMs < nextDelivery) {
+        if (nowMs <= nextDelivery) {
             return nextDeliveryTimestamp
+        }
+
+        val possibleToday = now.clone() as Calendar
+        possibleToday.set(Calendar.HOUR_OF_DAY, hour)
+        possibleToday.set(Calendar.MINUTE, minute)
+        possibleToday.set(Calendar.SECOND, 0)
+        possibleToday.set(Calendar.MILLISECOND, 0)
+
+        if (possibleToday.timeInMillis >= nowMs) {
+            return possibleToday.timeInMillis
+        }
+
+        if (isRepeating) {
+            return getRepeatingNextDayTimestamp(now)
         }
 
         val nextDay = now.clone() as Calendar
@@ -59,28 +73,13 @@ class MedicationReminder {
         nextDay.set(Calendar.SECOND, 0)
         nextDay.set(Calendar.MILLISECOND, 0)
         nextDay.add(Calendar.DAY_OF_MONTH, 1)
+        nextDay.set(Calendar.HOUR_OF_DAY, hour)
+        nextDay.set(Calendar.MINUTE, minute)
 
-        if (nextDay.timeInMillis > nextDelivery) {
-            val today = now.clone() as Calendar
-            today.set(Calendar.HOUR_OF_DAY, hour)
-            today.set(Calendar.MINUTE, minute)
-            today.set(Calendar.SECOND, 0)
-            today.set(Calendar.MILLISECOND, 0)
-
-            return today.timeInMillis
-        }
-
-        if (!isRepeating) {
-            nextDay.set(Calendar.HOUR_OF_DAY, hour)
-            nextDay.set(Calendar.MINUTE, minute)
-
-            return nextDay.timeInMillis
-        }
-
-        return getNextDayTimestamp(now)
+        return nextDay.timeInMillis
     }
 
-    private fun getNextDayTimestamp(now: Calendar): Long? {
+    private fun getRepeatingNextDayTimestamp(now: Calendar): Long? {
         val currentDayOfWeek = ReminderDay.fromCalendar(now)
         var nextDayOfWeek = currentDayOfWeek.getNextDay()
         var dayDiff = 1

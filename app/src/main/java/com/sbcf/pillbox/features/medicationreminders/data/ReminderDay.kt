@@ -15,6 +15,8 @@ enum class ReminderDay(val value: Int, private val dayOrdinal: Int) {
         var ordinal = dayOrdinal
         if (ordinal == SUNDAY.dayOrdinal) {
             ordinal = MONDAY.dayOrdinal
+        } else {
+            ordinal += 1
         }
 
         return days[ordinal - 1]
