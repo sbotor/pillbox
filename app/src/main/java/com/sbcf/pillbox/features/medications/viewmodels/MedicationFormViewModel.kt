@@ -7,12 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
-import com.sbcf.pillbox.utils.InputFields
+import com.sbcf.pillbox.utils.validation.InputFields
 import com.sbcf.pillbox.utils.Length
 import com.sbcf.pillbox.utils.validation.InputValidators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.EnumSet
 import javax.inject.Inject
 
 @HiltViewModel

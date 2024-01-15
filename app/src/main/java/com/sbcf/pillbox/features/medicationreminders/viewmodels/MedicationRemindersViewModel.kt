@@ -62,9 +62,7 @@ class MedicationRemindersViewModel @Inject constructor(
     var reminders by mutableStateOf(emptyList<MedicationReminderOverview>())
         private set
 
-    fun fetchReminders() {
-        viewModelScope.launch {
-            reminders = repo.getAll()
-        }
+    suspend fun fetchReminders() {
+        reminders = repo.getAll()
     }
 }

@@ -28,5 +28,7 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
             return bundle.getBoolean(arguments[1].name)
         }
     }
-    data object MedicationReminders : Screen("medications/reminders")
+
+    data object MedicationReminders : Screen("medicationReminders")
+    data object AddMedicationReminder : Screen("medicationReminders/add")
 }

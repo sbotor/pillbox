@@ -8,11 +8,28 @@ class ReminderDayMask(mask: Int = 0) {
         value = value or day.value
     }
 
-    fun unset(day: ReminderDay) {
+    fun set(idx: Int, value: Boolean) {
+        if (idx >= ReminderDay.days.size) {
+            return
+        }
+
+        val day = ReminderDay.days[idx]
+        if (value) {
+            set(day)
+        } else {
+            reset(day)
+        }
+    }
+
+    fun reset(day: ReminderDay) {
         value = value and day.value.inv()
     }
 
     fun isSet(day: ReminderDay) = (value and day.value) > 0
 
     fun isEmpty() = value == 0
+
+    fun getSetDays(): List<ReminderDay> {
+        return ReminderDay.days.filter { isSet(it) }
+    }
 }

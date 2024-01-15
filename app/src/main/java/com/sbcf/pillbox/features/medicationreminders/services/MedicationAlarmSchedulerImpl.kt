@@ -42,7 +42,7 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
 
         val now = clock.now().timeInMillis
         if (now > deliveryTimestamp) {
-            deliveryTimestamp = now
+            deliveryTimestamp = now + 1000
         }
 
         AlarmManagerCompat.setExactAndAllowWhileIdle(

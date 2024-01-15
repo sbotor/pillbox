@@ -1,8 +1,4 @@
-package com.sbcf.pillbox.utils
-
-import com.sbcf.pillbox.utils.validation.InputState
-import com.sbcf.pillbox.utils.validation.InputValidationState
-import com.sbcf.pillbox.utils.validation.ValidatorFn
+package com.sbcf.pillbox.utils.validation
 
 class InputFields {
     private val inputs = ArrayList<InputState>()

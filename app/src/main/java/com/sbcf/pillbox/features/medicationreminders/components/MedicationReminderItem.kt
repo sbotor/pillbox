@@ -1,4 +1,4 @@
-package com.sbcf.pillbox.features.medications.components
+package com.sbcf.pillbox.features.medicationreminders.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -13,15 +13,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sbcf.pillbox.components.ListItemSpacer
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDayMask
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
 
 @Composable
-fun MedicationReminderItem() {
-    val reminder = MedicationReminderOverview(1, 12, 49, null, ReminderDayMask())
-
+fun MedicationReminderItem(reminder: MedicationReminderOverview) {
     Card(modifier = Modifier.fillMaxWidth()) {
+        if (reminder.title.isNotEmpty()) {
+            Text(text = reminder.title, modifier = Modifier.padding(Dimens.PaddingNormal))
+        }
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -34,6 +34,19 @@ fun MedicationReminderItem() {
                 style = MaterialTheme.typography.headlineMedium
             )
             Switch(checked = reminder.isEnabled, onCheckedChange = {})
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(Dimens.PaddingNormal)
+        ) {
+            for (day in reminder.days.getSetDays()) {
+                // TODO: localize this
+                Text(
+                    text = day.toString().take(2),
+                    modifier = Modifier.padding(horizontal = Dimens.PaddingSmall)
+                )
+            }
         }
     }
     ListItemSpacer()

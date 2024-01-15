@@ -7,7 +7,8 @@ data class MedicationReminderOverview(
     val hour: Int,
     val minute: Int,
     val nextDeliveryTimestamp: Long?,
-    val days: ReminderDayMask
+    val days: ReminderDayMask,
+    val title: String
 ) {
     val isEnabled
         get() = nextDeliveryTimestamp != null

@@ -24,6 +24,8 @@
     <string name="medication_removal">Usuwanie leku</string>
     <string name="medication_list_empty">Brak leków</string>
 
+    <string name="medication_reminder_list_title">Przypomnienia o lekach</string>
+    <string name="add_medication_reminder_desc">Dodaj nowe przypomnienie</string>
     <string name="medication_notification_channel_name">Przypomnienia o lekach</string>
     <string name="medication_notification_title">Czas na leki</string>
 

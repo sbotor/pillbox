@@ -29,11 +29,11 @@ class MedicationReminderPublisherImpl @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        notificationManager.notify(reminder.id, androidNotification)
+        notificationManager.notify(reminder.id.toInt(), androidNotification)
 
         reminder.lastDeliveryTimestamp = clock.now().timeInMillis
 
-        val nextTimestamp = reminder.getEarliestNextTimestamp(clock.now())
+        val nextTimestamp = reminder.getEarliestRepeatingTimestamp(clock.now())
 
         if (nextTimestamp == null) {
             reminder.disable()

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sbcf.pillbox.components.BottomNavBar
 import com.sbcf.pillbox.features.home.screens.HomeScreen
+import com.sbcf.pillbox.features.medicationreminders.screens.EditMedicationReminderScreen
 import com.sbcf.pillbox.features.medications.screens.AddMedicationScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationDetailsScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationListScreen
@@ -61,7 +62,10 @@ fun PillBoxApp() {
                 AddMedicationScreen(onBackClick = { navController.navigateUp() })
             }
             composable(Screen.MedicationReminders.route) {
-                MedicationRemindersScreen()
+                MedicationRemindersScreen(onAddClick = { navController.navigate(Screen.AddMedicationReminder.route) })
+            }
+            composable(Screen.AddMedicationReminder.route) {
+                EditMedicationReminderScreen(onBackClick = { navController.navigateUp() })
             }
         }
     }
