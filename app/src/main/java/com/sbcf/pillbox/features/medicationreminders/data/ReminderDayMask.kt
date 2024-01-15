@@ -27,7 +27,7 @@ class ReminderDayMask(mask: Int = 0) {
 
     fun isSet(day: ReminderDay) = (value and day.value) > 0
 
-    fun isEmpty() = value == 0
+    fun isNotEmpty() = value > 0
 
     fun getSetDays(): List<ReminderDay> {
         return ReminderDay.days.filter { isSet(it) }

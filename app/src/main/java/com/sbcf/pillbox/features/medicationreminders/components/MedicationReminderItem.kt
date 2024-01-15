@@ -1,5 +1,7 @@
 package com.sbcf.pillbox.features.medicationreminders.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,9 +19,25 @@ import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOv
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Formatters
 
+data class MedicationReminderItemCallbacks(
+    val onClick: (MedicationReminderOverview) -> Unit,
+    val onLongClick: (MedicationReminderOverview) -> Unit,
+    val onToggle: (MedicationReminderOverview) -> Unit
+)
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MedicationReminderItem(reminder: MedicationReminderOverview) {
-    Card(modifier = Modifier.fillMaxWidth()) {
+fun MedicationReminderItem(
+    reminder: MedicationReminderOverview,
+    dateTimeFormatter: (MedicationReminderOverview) -> String,
+    callbacks: MedicationReminderItemCallbacks
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(onClick = { callbacks.onClick(reminder) },
+                onLongClick = { callbacks.onLongClick(reminder) })
+    ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -31,7 +49,10 @@ fun MedicationReminderItem(reminder: MedicationReminderOverview) {
                 text = Formatters.time(reminder.hour, reminder.minute),
                 style = MaterialTheme.typography.headlineMedium
             )
-            Switch(checked = reminder.isEnabled, onCheckedChange = {})
+            if (reminder.isEnabled) {
+                Text(text = dateTimeFormatter(reminder))
+            }
+            Switch(checked = reminder.isEnabled, onCheckedChange = { callbacks.onToggle(reminder) })
         }
         if (reminder.title.isNotEmpty()) {
             Text(text = reminder.title, modifier = Modifier.padding(Dimens.PaddingNormal))

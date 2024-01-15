@@ -62,7 +62,9 @@ fun PillBoxApp() {
                 AddMedicationScreen(onBackClick = { navController.navigateUp() })
             }
             composable(Screen.MedicationReminders.route) {
-                MedicationRemindersScreen(onAddClick = { navController.navigate(Screen.AddMedicationReminder.route) })
+                MedicationRemindersScreen(
+                    onAddClick = { navController.navigate(Screen.AddMedicationReminder.route) },
+                    onItemClick = { /*TODO*/ })
             }
             composable(Screen.AddMedicationReminder.route) {
                 EditMedicationReminderScreen(onBackClick = { navController.navigateUp() })

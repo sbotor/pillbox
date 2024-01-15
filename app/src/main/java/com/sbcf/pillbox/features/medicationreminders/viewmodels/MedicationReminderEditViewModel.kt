@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
+import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
+import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculator
 import com.sbcf.pillbox.utils.Clock
 import com.sbcf.pillbox.utils.validation.InputState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +23,8 @@ import javax.inject.Inject
 class MedicationReminderEditViewModel @Inject constructor(
     private val repo: MedicationRemindersRepository,
     private val scheduler: MedicationAlarmScheduler,
-    private val clock: Clock
+    private val clock: Clock,
+    private val calculator: ReminderTimestampCalculator
 ) :
     ViewModel() {
     class State(now: Calendar) {
@@ -73,7 +76,8 @@ class MedicationReminderEditViewModel @Inject constructor(
         }
 
         if (shouldRecalculateTimestamp) {
-            val timestamp = rem.getEarliestTimestamp(clock.now())
+            val tsInfo = TimestampInfo(rem)
+            val timestamp = calculator.getEarliestTimestamp(tsInfo)
             if (timestamp != null) {
                 rem.enable(timestamp)
             }

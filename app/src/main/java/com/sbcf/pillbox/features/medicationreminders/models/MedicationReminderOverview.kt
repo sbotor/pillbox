@@ -3,7 +3,7 @@ package com.sbcf.pillbox.features.medicationreminders.models
 import com.sbcf.pillbox.features.medicationreminders.data.ReminderDayMask
 
 data class MedicationReminderOverview(
-    val id: Int,
+    val id: Long,
     val hour: Int,
     val minute: Int,
     val nextDeliveryTimestamp: Long?,

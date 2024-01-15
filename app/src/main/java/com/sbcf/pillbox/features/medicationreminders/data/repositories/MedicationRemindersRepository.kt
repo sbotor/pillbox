@@ -11,5 +11,6 @@ interface MedicationRemindersRepository {
     suspend fun getAll(): List<MedicationReminderOverview>
     suspend fun changeDeliveryTimestamp(id: Long, value: Long?)
     suspend fun add(reminder: MedicationReminder): Long
+    suspend fun deleteById(id: Long)
 }
 

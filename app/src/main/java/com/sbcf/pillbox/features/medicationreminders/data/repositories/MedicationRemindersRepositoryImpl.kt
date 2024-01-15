@@ -25,4 +25,5 @@ class MedicationRemindersRepositoryImpl @Inject constructor(
         dao.changeDeliveryTimestamp(id, value)
 
     override suspend fun add(reminder: MedicationReminder) = dao.add(reminder)
+    override suspend fun deleteById(id: Long) = dao.delete(id)
 }

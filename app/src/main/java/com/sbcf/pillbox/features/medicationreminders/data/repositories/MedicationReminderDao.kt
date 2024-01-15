@@ -33,4 +33,7 @@ interface MedicationReminderDao {
 
     @Insert
     suspend fun add(reminder: MedicationReminder): Long
+
+    @Query("DELETE FROM MedicationReminder WHERE id = :id")
+    suspend fun delete(id: Long)
 }

@@ -7,13 +7,15 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.utils.Clock
 import javax.inject.Inject
 
 class MedicationReminderPublisherImpl @Inject constructor(
     private val context: Context,
     private val clock: Clock,
-    private val scheduler: MedicationAlarmScheduler
+    private val scheduler: MedicationAlarmScheduler,
+    private val calculator: ReminderTimestampCalculator
 ) :
     MedicationReminderPublisher {
     override fun publish(reminder: MedicationReminder) {
@@ -33,7 +35,8 @@ class MedicationReminderPublisherImpl @Inject constructor(
 
         reminder.lastDeliveryTimestamp = clock.now().timeInMillis
 
-        val nextTimestamp = reminder.getEarliestRepeatingTimestamp(clock.now())
+        val tsInfo = TimestampInfo(reminder)
+        val nextTimestamp = calculator.getEarliestRepeatingTimestamp(tsInfo)
 
         if (nextTimestamp == null) {
             reminder.disable()

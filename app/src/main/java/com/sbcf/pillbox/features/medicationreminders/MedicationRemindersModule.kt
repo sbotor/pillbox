@@ -9,6 +9,8 @@ import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmSch
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmSchedulerImpl
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationReminderPublisher
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationReminderPublisherImpl
+import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculator
+import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculatorImpl
 import com.sbcf.pillbox.utils.Clock
 import dagger.Module
 import dagger.Provides
@@ -31,7 +33,7 @@ class MedicationRemindersModule {
 
     @Provides
     @Singleton
-    fun provideMedicationsNotificationScheduler(
+    fun provideMedicationsAlarmScheduler(
         @ApplicationContext context: Context,
         clock: Clock
     ): MedicationAlarmScheduler =
@@ -39,10 +41,16 @@ class MedicationRemindersModule {
 
     @Provides
     @Singleton
-    fun provideMedicationNotificationPublisher(
+    fun provideMedicationReminderPublisher(
         @ApplicationContext context: Context,
         clock: Clock,
-        scheduler: MedicationAlarmScheduler
+        scheduler: MedicationAlarmScheduler,
+        calculator: ReminderTimestampCalculator
     ): MedicationReminderPublisher =
-        MedicationReminderPublisherImpl(context, clock, scheduler)
+        MedicationReminderPublisherImpl(context, clock, scheduler, calculator)
+
+    @Provides
+    @Singleton
+    fun provideReminderTimestampCalculator(clock: Clock): ReminderTimestampCalculator =
+        ReminderTimestampCalculatorImpl(clock)
 }

@@ -27,6 +27,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medicationreminders.viewmodels.MedicationRemindersViewModel
 import com.sbcf.pillbox.features.medicationreminders.components.MedicationReminderItem
+import com.sbcf.pillbox.features.medicationreminders.components.MedicationReminderItemCallbacks
+import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
@@ -34,9 +36,10 @@ import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 @Composable
 fun MedicationRemindersScreen(
     vm: MedicationRemindersViewModel = hiltViewModel(),
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onItemClick: (MedicationReminderOverview) -> Unit,
 ) {
-    val launcher = rememberLauncherForActivityResult(
+    val notificationPermLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = {
             vm.notificationPermission.setRequestResult(it)
@@ -65,13 +68,13 @@ fun MedicationRemindersScreen(
             ) {
                 Text(text = stringResource(id = R.string.notifications_disabled))
                 if (!vm.notificationPermission.isEstablished && vm.notificationPermission.shouldRequest()) {
-                    Button(onClick = { launcher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
+                    Button(onClick = { notificationPermLauncher.launch(Manifest.permission.POST_NOTIFICATIONS) }) {
                         Text(text = stringResource(id = R.string.enable_notifications))
                     }
                 }
             }
         } else {
-            MedicationReminderList(padding = padding)
+            MedicationReminderList(padding = padding, onItemClick = onItemClick)
         }
     }
 }
@@ -79,7 +82,8 @@ fun MedicationRemindersScreen(
 @Composable
 private fun MedicationReminderList(
     padding: PaddingValues,
-    vm: MedicationRemindersViewModel = hiltViewModel()
+    vm: MedicationRemindersViewModel = hiltViewModel(),
+    onItemClick: (MedicationReminderOverview) -> Unit,
 ) {
     LaunchedEffect(key1 = vm) {
         vm.fetchReminders()
@@ -91,7 +95,15 @@ private fun MedicationReminderList(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         items(vm.reminders) {
-            MedicationReminderItem(it)
+            val callbacks = MedicationReminderItemCallbacks(
+                onClick = onItemClick,
+                onLongClick = { vm.removeReminder(it.id) },
+                onToggle = { vm.toggleReminder(it) }
+            )
+            MedicationReminderItem(
+                reminder = it,
+                callbacks = callbacks,
+                dateTimeFormatter = { vm.formatReminderDateTime(it) })
         }
     }
 }
