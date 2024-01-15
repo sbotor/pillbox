@@ -1,13 +1,10 @@
-package com.sbcf.pillbox.features.medications
+package com.sbcf.pillbox.features.medicationreminders
 
 import android.content.Context
 import com.sbcf.pillbox.data.AppDatabase
-import com.sbcf.pillbox.features.medications.data.repositories.MedicationDao
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationReminderDao
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepositoryImpl
-import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
-import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepositoryImpl
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmSchedulerImpl
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationReminderPublisher
@@ -22,12 +19,29 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class MedicationsModule {
+class MedicationRemindersModule {
     @Provides
-    fun provideMedicationDao(db: AppDatabase): MedicationDao = db.medicationDao()
+    fun provideMedicationReminderDao(db: AppDatabase): MedicationReminderDao =
+        db.medicationReminderDao()
 
     @Provides
     @Singleton
-    fun provideMedicationsRepository(dao: MedicationDao): MedicationsRepository =
-        MedicationsRepositoryImpl(dao)
+    fun provideMedicationRemindersRepository(dao: MedicationReminderDao): MedicationRemindersRepository =
+        MedicationRemindersRepositoryImpl(dao)
+
+    @Provides
+    @Singleton
+    fun provideMedicationsNotificationScheduler(
+        @ApplicationContext context: Context,
+        clock: Clock
+    ): MedicationAlarmScheduler =
+        MedicationAlarmSchedulerImpl(context, clock)
+
+    @Provides
+    @Singleton
+    fun provideMedicationNotificationPublisher(
+        @ApplicationContext context: Context,
+        clock: Clock
+    ): MedicationReminderPublisher =
+        MedicationReminderPublisherImpl(context, clock)
 }

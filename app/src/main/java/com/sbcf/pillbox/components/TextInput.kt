@@ -15,11 +15,14 @@ fun TextInput(
     maxLength: Int? = null,
     enabled: Boolean = true
 ) {
+    val changeGuard: (String) -> Boolean =
+        if (maxLength == null) { _ -> true } else { value -> value.length <= maxLength }
+
     TextField(
         value = state.value,
         onValueChange = {
             state.validation.markAsDirty()
-            if (maxLength == null || it.length <= maxLength) {
+            if (changeGuard(it)) {
                 state.validation.validate(it)
                 state.value = it
             }

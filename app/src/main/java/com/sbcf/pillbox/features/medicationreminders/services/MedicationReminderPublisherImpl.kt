@@ -1,4 +1,4 @@
-package com.sbcf.pillbox.features.medications.services
+package com.sbcf.pillbox.features.medicationreminders.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,16 +6,16 @@ import android.content.Context
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.sbcf.pillbox.R
-import com.sbcf.pillbox.features.medications.data.MedicationNotification
+import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.utils.Clock
 import javax.inject.Inject
 
-class MedicationNotificationPublisherImpl @Inject constructor(
+class MedicationReminderPublisherImpl @Inject constructor(
     private val context: Context,
     private val clock: Clock
 ) :
-    MedicationNotificationPublisher {
-    override fun publish(notification: MedicationNotification) {
+    MedicationReminderPublisher {
+    override fun publish(notification: MedicationReminder) {
         val notificationManager = getManager()
         if (!notificationManager.areNotificationsEnabled()) {
             return

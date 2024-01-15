@@ -83,6 +83,10 @@ class MedicationFormViewModel @Inject constructor(
         isEditable = !isEditable
     }
 
+    fun invalidateCache() {
+        repo.invalidateCache()
+    }
+
     private fun resetForm(med: Medication?) {
         if (med == null) {
             state.name.reset("")

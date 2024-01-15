@@ -18,7 +18,7 @@
         android:theme="@style/Theme.PillBox"
         tools:targetApi="31">
         <receiver
-            android:name=".features.medications.receivers.MedicationAlarmReceiver"
+            android:name=".features.medicationreminders.receivers.MedicationAlarmReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

@@ -4,8 +4,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.sbcf.pillbox.extensions.launchGlobalAsync
-import com.sbcf.pillbox.features.medications.data.repositories.MedicationNotificationsRepository
-import com.sbcf.pillbox.features.medications.services.MedicationAlarmScheduler
+import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
+import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.utils.Clock
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class BootReceiver : BroadcastReceiver() {
     @Inject
-    lateinit var repo: MedicationNotificationsRepository
+    lateinit var repo: MedicationRemindersRepository
 
     @Inject
     lateinit var scheduler: MedicationAlarmScheduler
@@ -29,7 +29,12 @@ class BootReceiver : BroadcastReceiver() {
         }
 
         launchGlobalAsync {
-            val notifications = repo.getDue(clock.now().timeInMillis)
+            // TODO: Possibly unnecessary to save the timestamp?
+            val notifications = repo.getDue(Long.MAX_VALUE)
+            if (notifications.isEmpty()) {
+                return@launchGlobalAsync
+            }
+
             scheduler.scheduleAll(notifications)
             repo.updateMany(notifications)
         }

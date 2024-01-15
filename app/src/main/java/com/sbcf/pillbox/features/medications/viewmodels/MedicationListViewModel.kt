@@ -14,8 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicationListViewModel @Inject constructor(private val repo: MedicationsRepository) :
     ViewModel() {
-    private var allMedications = listOf<MedicationOverview>()
-
     var medications by mutableStateOf(listOf<MedicationOverview>())
         private set
     var isSearching by mutableStateOf(false)
@@ -24,6 +22,10 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         private set
 
     fun fetchMedications() {
+        if (repo.cachedMedicationOverviews != null) {
+            return
+        }
+
         viewModelScope.launch {
             fetchMedicationsCore()
         }
@@ -41,19 +43,19 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         val trimmed = textFilter.trim()
 
         viewModelScope.launch {
-            medications = allMedications.filter {
+            medications = repo.cachedMedicationOverviews?.filter {
                 it.name.contains(textFilter, true) || it.name.contains(trimmed, true)
-            }
+            } ?: medications
         }
     }
 
     fun stopSearching() {
         isSearching = false
         textFilter = ""
-        medications = allMedications
+        medications = repo.cachedMedicationOverviews ?: medications
     }
 
-    fun removeMedication(medicationId: Int){
+    fun removeMedication(medicationId: Int) {
         viewModelScope.launch {
             repo.removeMedicationById(medicationId)
             fetchMedicationsCore()
@@ -61,7 +63,6 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
     }
 
     private suspend fun fetchMedicationsCore() {
-        allMedications = repo.getAllMedications()
-        medications = allMedications
+        medications = repo.getAllMedications()
     }
 }

@@ -6,8 +6,13 @@ import javax.inject.Inject
 
 class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationDao) :
     MedicationsRepository {
+    override var cachedMedicationOverviews: List<MedicationOverview>? = null
+        private set
+
     override suspend fun getAllMedications(): List<MedicationOverview> {
-        return dao.getAll()
+        val result = dao.getAll()
+        cachedMedicationOverviews = result
+        return result
     }
 
     override suspend fun createMedication(medication: Medication) {
@@ -22,5 +27,9 @@ class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationD
 
     override suspend fun removeMedicationById(medicationId: Int) {
         dao.delete(medicationId)
+    }
+
+    override fun invalidateCache() {
+        cachedMedicationOverviews = null
     }
 }

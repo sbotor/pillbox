@@ -16,7 +16,7 @@ fun MedicationRemovalDialog(
 ) {
     AlertDialog(
         title = {
-            Text(text = stringResource(id = R.string.mediaction_removal))
+            Text(text = stringResource(id = R.string.medication_removal))
         },
         text = {
             // TODO

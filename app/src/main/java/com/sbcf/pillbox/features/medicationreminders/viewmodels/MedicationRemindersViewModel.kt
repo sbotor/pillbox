@@ -1,4 +1,4 @@
-package com.sbcf.pillbox.features.medications.viewmodels
+package com.sbcf.pillbox.features.medicationreminders.viewmodels
 
 import android.Manifest
 import android.content.Context
@@ -10,17 +10,18 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbcf.pillbox.features.medications.data.MedicationNotification
-import com.sbcf.pillbox.features.medications.data.repositories.MedicationNotificationsRepository
-import com.sbcf.pillbox.features.medications.services.MedicationAlarmScheduler
+import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
+import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
+import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MedicationNotificationsViewModel @Inject constructor(
-    private val repo: MedicationNotificationsRepository,
-    private val scheduler: MedicationAlarmScheduler) :
+class MedicationRemindersViewModel @Inject constructor(
+    private val repo: MedicationRemindersRepository,
+    private val scheduler: MedicationAlarmScheduler
+) :
     ViewModel() {
     // TODO: This flow is kind of wacky. Need to find a way to determine if the user denied the permission.
     // https://developer.android.com/develop/ui/views/notifications/notification-permission#user-select-dont-allow
@@ -58,15 +59,12 @@ class MedicationNotificationsViewModel @Inject constructor(
 
     val notificationPermission = NotificationPermissionState()
 
-    var notifications by mutableStateOf(emptyList<MedicationNotification>())
+    var reminders by mutableStateOf(emptyList<MedicationReminderOverview>())
         private set
 
-    fun fetchNotifications() {
+    fun fetchReminders() {
         viewModelScope.launch {
-            val fetched = repo.getAll()
-            notifications = fetched
-            // TODO: This currently schedules the mocked notifications
-            scheduler.scheduleAll(fetched)
+            reminders = repo.getAll()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.sbcf.pillbox.features.medications.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,16 +26,23 @@ import com.sbcf.pillbox.features.medications.viewmodels.MedicationFormViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Length
 
+data class MedicationDetailsCallbacks(
+    val onBackClick: () -> Unit,
+    val onSaveClick: () -> Unit
+)
+
 @Composable
 fun MedicationDetailsScreen(
     medicationId: Int,
     initiallyEditable: Boolean,
     vm: MedicationFormViewModel = hiltViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit
 ) = MedicationFormScreen(
     vm,
-    onBackClick,
-    onSaveClick = { vm.saveMedication(callback = { vm.toggleEditing() }) }) {
+    MedicationDetailsCallbacks(
+        onBackClick = onBackClick,
+        onSaveClick = { vm.saveMedication(callback = { vm.toggleEditing() }) })
+) {
     vm.fetchMedication(medicationId, initiallyEditable)
 }
 
@@ -44,8 +52,10 @@ fun AddMedicationScreen(
     onBackClick: () -> Unit = {}
 ) = MedicationFormScreen(
     vm,
-    onBackClick,
-    onSaveClick = { vm.saveMedication(callback = onBackClick) }) {
+    MedicationDetailsCallbacks(
+        onBackClick = onBackClick,
+        onSaveClick = { vm.saveMedication(callback = onBackClick) })
+) {
     vm.resetForm()
 }
 
@@ -53,8 +63,7 @@ fun AddMedicationScreen(
 @Composable
 private fun MedicationFormScreen(
     vm: MedicationFormViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onSaveClick: () -> Unit,
+    callbacks: MedicationDetailsCallbacks,
     onInit: () -> Unit
 ) {
     onInit()
@@ -68,7 +77,7 @@ private fun MedicationFormScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onBackClick
+                    onClick = callbacks.onBackClick
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -79,7 +88,10 @@ private fun MedicationFormScreen(
                 MedicationFormActions(
                     isCreating = vm.isCreating,
                     isEditable = vm.isEditable,
-                    onSaveClick = onSaveClick,
+                    onSaveClick = {
+                        callbacks.onSaveClick()
+                        vm.invalidateCache()
+                    },
                     onEditToggle = vm::toggleEditing
                 )
             })

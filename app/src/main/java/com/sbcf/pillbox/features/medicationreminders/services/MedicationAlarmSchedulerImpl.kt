@@ -1,4 +1,4 @@
-package com.sbcf.pillbox.features.medications.services
+package com.sbcf.pillbox.features.medicationreminders.services
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -6,8 +6,8 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.AlarmManagerCompat
-import com.sbcf.pillbox.features.medications.data.MedicationNotification
-import com.sbcf.pillbox.features.medications.receivers.MedicationAlarmReceiver
+import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.receivers.MedicationAlarmReceiver
 import com.sbcf.pillbox.utils.Clock
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
     private val context: Context,
     private val clock: Clock
 ) : MedicationAlarmScheduler {
-    override suspend fun scheduleAll(notifications: List<MedicationNotification>) {
+    override suspend fun scheduleAll(notifications: List<MedicationReminder>) {
         val alarmManager = getAlarmManager()
 
         for (notification in notifications) {
@@ -23,7 +23,7 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
         }
     }
 
-    private fun schedule(alarmManager: AlarmManager, notification: MedicationNotification) {
+    private fun schedule(alarmManager: AlarmManager, notification: MedicationReminder) {
         val intent = Intent().also {
             it.component =
                 ComponentName(context, MedicationAlarmReceiver::class.java)

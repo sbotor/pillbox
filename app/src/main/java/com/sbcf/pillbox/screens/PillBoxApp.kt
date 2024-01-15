@@ -11,7 +11,9 @@ import com.sbcf.pillbox.features.home.screens.HomeScreen
 import com.sbcf.pillbox.features.medications.screens.AddMedicationScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationDetailsScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationListScreen
-import com.sbcf.pillbox.features.medications.screens.MedicationScreen
+import com.sbcf.pillbox.features.medicationreminders.screens.MedicationRemindersScreen
+import com.sbcf.pillbox.features.medications.screens.MedicationDetailsCallbacks
+import com.sbcf.pillbox.features.medications.screens.MedicationListCallbacks
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
 @Composable
@@ -29,34 +31,38 @@ fun PillBoxApp() {
             startDestination = Screen.Home.route,
             modifier = Modifier.scaffoldedContent(padding)
         ) {
+            composable(Screen.Home.route) {
+                HomeScreen()
+            }
+
             composable(Screen.MedicationList.route) {
-                MedicationListScreen(
-                    onAddMedicationClick = { navController.navigate(Screen.AddMedication.route) },
+                val callbacks = MedicationListCallbacks(
+                    onAddMedicationClick = {
+                        navController.navigate(Screen.AddMedication.route)
+                    },
                     onItemOpenClick = {
                         navController.navigate(Screen.MedicationDetails.createRoute(it.id, false))
                     },
                     onItemEditClick = {
                         navController.navigate(Screen.MedicationDetails.createRoute(it.id, true))
-                    })
+                    }
+                )
+                MedicationListScreen(callbacks = callbacks)
             }
             composable(Screen.MedicationDetails.route, Screen.MedicationDetails.arguments) {
                 val arguments = it.arguments!!
                 MedicationDetailsScreen(
                     medicationId = Screen.MedicationDetails.getMedicationId(arguments),
                     initiallyEditable = Screen.MedicationDetails.getEditable(arguments),
-                    onBackClick = { navController.navigateUp() })
+                    onBackClick = { navController.navigateUp() }
+                )
             }
             composable(Screen.AddMedication.route) {
                 AddMedicationScreen(onBackClick = { navController.navigateUp() })
             }
-            composable(Screen.Home.route) {
-                HomeScreen()
-            }
-            composable(Screen.Medication.route) {
-                MedicationScreen(onMedicationClick = { navController.navigate(Screen.MedicationList.route) })
+            composable(Screen.MedicationReminders.route) {
+                MedicationRemindersScreen()
             }
         }
     }
-
-
 }
