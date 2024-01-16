@@ -39,6 +39,8 @@
     <string name="home_page_nav">Strona główna</string>
     <string name="medication_nav">Leki</string>
     <string name="medication_reminders">Przypomnienia</string>
+    <string name="amount">Ilość</string>
+    <string name="dosage">Dawkowanie</string>
 
     <string name="monday">Poniedziałek</string>
     <string name="tuesday">Wtorek</string>
