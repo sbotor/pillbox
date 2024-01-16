@@ -7,8 +7,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,7 +40,7 @@ fun DosageInput(
             maxLength = 2,
             modifier = Modifier
                 .width(100.dp)
-                .padding(10.dp)
+                .padding(2.dp)
         )
         ExposedDropdownMenuBox(
             expanded = unitIsExpanded,
@@ -52,7 +52,7 @@ fun DosageInput(
                 .width(200.dp)
                 .padding(10.dp)
         ) {
-            TextField(
+            OutlinedTextField(
                 value = dosage.unit.shortcut,
                 readOnly = true,
                 onValueChange = {},
@@ -90,7 +90,7 @@ fun DosageInput(
             maxLength = 3,
             modifier = Modifier
                 .width(100.dp)
-                .padding(10.dp)
+                .padding(2.dp)
         )
 
         ExposedDropdownMenuBox(
@@ -104,7 +104,7 @@ fun DosageInput(
                 .width(200.dp)
                 .padding(10.dp),
         ) {
-            TextField(
+            OutlinedTextField(
                 value = dosage.intervalType.getName(dosage.interval),
                 onValueChange = {},
                 readOnly = true,

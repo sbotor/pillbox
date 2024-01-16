@@ -1,6 +1,5 @@
 package com.sbcf.pillbox.features.medications.models
 
-//I lost my sanity trying to make this a one-to-one relationship with medication and deal with all the repercussions
 data class Dosage (
     var amount : Int,
     var unit : DosageUnit,
