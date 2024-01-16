@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
+import com.sbcf.pillbox.components.DosageInput
 import com.sbcf.pillbox.components.TextInput
 import com.sbcf.pillbox.features.medications.components.MedicationFormActions
 import com.sbcf.pillbox.features.medications.viewmodels.MedicationFormViewModel
@@ -99,14 +100,6 @@ private fun MedicationFormScreen(
                 enabled = vm.isEditable
             )
             TextInput(
-                state = vm.state.dosage,
-                label = { Text(text = stringResource(id = R.string.medication_dosage)) },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(text = stringResource(id = R.string.medication_dosage_placeholder)) },
-                maxLength = Length.Medication.MaxDosageLength,
-                enabled = vm.isEditable
-            )
-            TextInput(
                 state = vm.state.description,
                 label = { Text(text = stringResource(id = R.string.medication_description)) },
                 modifier = Modifier
@@ -115,6 +108,8 @@ private fun MedicationFormScreen(
                 maxLength = Length.Medication.MaxDescriptionLength,
                 enabled = vm.isEditable
             )
+
+            DosageInput(vm.state.dosage, isEditable =  vm::isEditable) //TODO
         }
     }
 }

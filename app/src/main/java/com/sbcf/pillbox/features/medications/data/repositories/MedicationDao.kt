@@ -9,7 +9,7 @@ import com.sbcf.pillbox.features.medications.models.MedicationOverview
 
 @Dao
 interface MedicationDao {
-    @Query("SELECT id, name, dosage FROM Medication ORDER BY name")
+    @Query("SELECT id, name, amount, unit, interval, intervalType FROM Medication ORDER BY name")
     suspend fun getAll(): List<MedicationOverview>
 
     @Insert
