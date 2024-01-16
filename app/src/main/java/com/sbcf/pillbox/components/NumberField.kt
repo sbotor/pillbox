@@ -11,35 +11,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import kotlin.reflect.KMutableProperty0
 
 @Composable
 fun NumberField(
-    state: KMutableProperty0<Int>,
+    state: Int,
     isEditable: Boolean,
-    labelId : Int,
+    labelId: Int,
     maxLength: Int,
-    modifier: Modifier
-)
-{
-    var amount by remember { mutableStateOf(state.get().toString()) }
+    modifier: Modifier,
+    onValChange: (Int) -> Unit
+) {
+    var amount by remember { mutableStateOf(state.toString()) }
 
-    if(amount.isNotEmpty())
-        amount = state.get().toString()
+    if (amount.isNotEmpty())
+        amount = state.toString()
 
     OutlinedTextField(
         value = amount,
         onValueChange = {
-            if(it.length <= maxLength)
-            {
+            if (it.length <= maxLength) {
                 amount = it
-                if(amount.isNotEmpty())
-                {
-                    state.set(amount.trim().toInt())
+                if (amount.isNotEmpty()) {
+                    onValChange(amount.trim().toInt())
                 }
             }
         },
-        label = { Text( stringResource(id = labelId)) },
+        label = { Text(stringResource(id = labelId)) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
         modifier = modifier,
         enabled = isEditable

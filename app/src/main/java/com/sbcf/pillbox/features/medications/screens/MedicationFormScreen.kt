@@ -120,12 +120,12 @@ private fun MedicationFormScreen(
                 maxLength = Length.Medication.MaxDescriptionLength,
                 enabled = vm.isEditable
             )
-            
+
             Text(
                 text = stringResource(id = R.string.dosage),
                 fontSize = 26.sp
             )
-            DosageInput(vm.state.dosage, isEditable =  vm::isEditable)
+            DosageInput(vm.state.dosage, isEditable = vm.isEditable)
         }
     }
 }

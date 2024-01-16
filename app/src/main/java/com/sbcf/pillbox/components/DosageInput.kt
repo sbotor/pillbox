@@ -21,39 +21,43 @@ import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medications.models.Dosage
 import com.sbcf.pillbox.features.medications.models.DosageTimeInterval
 import com.sbcf.pillbox.features.medications.models.DosageUnit
-import kotlin.reflect.KProperty0
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DosageInput(
-    dosage : Dosage,
-    isEditable: KProperty0<Boolean>
-){
-    var unitIsExpanded by remember { mutableStateOf(false)}
+    dosage: Dosage,
+    isEditable: Boolean
+) {
+    var dropdownsEnabled by remember { mutableStateOf(false) }
+    var unitIsExpanded by remember { mutableStateOf(false) }
     var intervalIsExpanded by remember { mutableStateOf(false) }
+
+    dropdownsEnabled = isEditable
 
     Row {
         NumberField(
-            state = dosage::amount,
-            isEditable = isEditable.get(),
+            state = dosage.amount,
+            isEditable = isEditable,
             labelId = R.string.amount,
             maxLength = 2,
             modifier = Modifier
                 .width(100.dp)
-                .padding(2.dp)
+                .padding(2.dp),
+            onValChange = { dosage.amount = it }
         )
         ExposedDropdownMenuBox(
             expanded = unitIsExpanded,
-            onExpandedChange = { newVal ->
-                if(isEditable.get())
-                    unitIsExpanded = newVal
+            onExpandedChange = {
+                if (dropdownsEnabled)
+                    unitIsExpanded = !unitIsExpanded
             },
             modifier = Modifier
                 .width(200.dp)
                 .padding(10.dp)
         ) {
             OutlinedTextField(
-                value = dosage.unit.shortcut,
+                enabled = dropdownsEnabled,
+                value = dosage.unit.abbreviation,
                 readOnly = true,
                 onValueChange = {},
                 trailingIcon = {
@@ -66,10 +70,9 @@ fun DosageInput(
                 expanded = unitIsExpanded,
                 onDismissRequest = { unitIsExpanded = false }
             ) {
-                for(value in DosageUnit.entries)
-                {
+                for (value in DosageUnit.entries) {
                     DropdownMenuItem(
-                        text = { Text(text = value.shortcut) },
+                        text = { Text(text = value.abbreviation) },
                         onClick = {
                             dosage.unit = value
                             unitIsExpanded = false
@@ -79,32 +82,33 @@ fun DosageInput(
             }
         }
     }
-    Row (modifier = Modifier.padding(10.dp)){
+    Row(modifier = Modifier.padding(10.dp)) {
         Text(text = " co ", fontSize = 20.sp)
     }
-    Row{
+    Row {
         NumberField(
-            state = dosage::interval,
-            isEditable = isEditable.get(),
+            state = dosage.interval,
+            isEditable = isEditable,
             labelId = R.string.amount,
             maxLength = 3,
             modifier = Modifier
                 .width(100.dp)
-                .padding(2.dp)
+                .padding(2.dp),
+            onValChange = { dosage.interval = it }
         )
 
         ExposedDropdownMenuBox(
             expanded = intervalIsExpanded,
-            onExpandedChange = { it ->
-                if(isEditable.get()) {
-                    intervalIsExpanded = it
-                }
+            onExpandedChange = {
+                if (dropdownsEnabled)
+                    intervalIsExpanded = !intervalIsExpanded
             },
             modifier = Modifier
                 .width(200.dp)
                 .padding(10.dp),
         ) {
             OutlinedTextField(
+                enabled = dropdownsEnabled,
                 value = dosage.intervalType.getName(dosage.interval),
                 onValueChange = {},
                 readOnly = true,
