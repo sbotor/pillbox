@@ -1,13 +1,13 @@
 package com.sbcf.pillbox.data
 
 import androidx.room.TypeConverter
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDayMask
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeekMask
 
 class Converters {
 
     @TypeConverter
-    fun convertToNotificationDayMask(value: Int): ReminderDayMask = ReminderDayMask(value)
+    fun convertToDaOfWeekMask(value: Int): DayOfWeekMask = DayOfWeekMask(value)
 
     @TypeConverter
-    fun convertToInt(value: ReminderDayMask): Int = value.value
+    fun convertToInt(value: DayOfWeekMask): Int = value.value
 }

@@ -12,31 +12,57 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sbcf.pillbox.components.ListItemSpacer
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeek
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
-import com.sbcf.pillbox.utils.Formatters
 
 data class MedicationReminderItemCallbacks(
     val onClick: (MedicationReminderOverview) -> Unit,
-    val onLongClick: (MedicationReminderOverview) -> Unit,
+    val onRemoval: (MedicationReminderOverview) -> Unit,
     val onToggle: (MedicationReminderOverview) -> Unit
+)
+
+data class MedicationReminderItemFormatters(
+    val nextNotificationTime: (MedicationReminderOverview) -> String,
+    val displayLabel: (MedicationReminderOverview) -> String,
+    val shortDayOfWeek: (DayOfWeek) -> String
 )
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MedicationReminderItem(
     reminder: MedicationReminderOverview,
-    dateTimeFormatter: (MedicationReminderOverview) -> String,
+    displayTime: String,
+    formatters: MedicationReminderItemFormatters,
     callbacks: MedicationReminderItemCallbacks
 ) {
+    var showRemovalDialog by remember { mutableStateOf(false) }
+
+    if (showRemovalDialog) {
+        MedicationReminderRemovalDialog(
+            onConfirmation = {
+                callbacks.onRemoval(reminder)
+                showRemovalDialog = false
+            },
+            onDismissRequest = {
+                showRemovalDialog = false
+            },
+            subtitle = formatters.displayLabel(reminder)
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(onClick = { callbacks.onClick(reminder) },
-                onLongClick = { callbacks.onLongClick(reminder) })
+                onLongClick = { showRemovalDialog = true })
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -46,11 +72,11 @@ fun MedicationReminderItem(
                 .padding(Dimens.PaddingNormal)
         ) {
             Text(
-                text = Formatters.time(reminder.hour, reminder.minute),
+                text = displayTime,
                 style = MaterialTheme.typography.headlineMedium
             )
             if (reminder.isEnabled) {
-                Text(text = dateTimeFormatter(reminder))
+                Text(text = formatters.nextNotificationTime(reminder))
             }
             Switch(checked = reminder.isEnabled, onCheckedChange = { callbacks.onToggle(reminder) })
         }
@@ -66,9 +92,8 @@ fun MedicationReminderItem(
                     .padding(Dimens.PaddingNormal)
             ) {
                 for (day in setDays) {
-                    // TODO: localize this
                     Text(
-                        text = day.toString().take(2),
+                        text = formatters.shortDayOfWeek(day),
                         modifier = Modifier.padding(horizontal = Dimens.PaddingSmall)
                     )
                 }

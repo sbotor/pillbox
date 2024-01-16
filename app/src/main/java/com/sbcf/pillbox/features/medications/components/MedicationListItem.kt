@@ -5,10 +5,8 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
@@ -25,7 +23,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.ListItemSpacer
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
@@ -44,22 +41,19 @@ fun MedicationListItem(
     callbacks: MedicationListItemCallbacks,
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
-    var removalAlert by remember { mutableStateOf(false) }
+    var showRemovalDialog by remember { mutableStateOf(false) }
 
-    when {
-        removalAlert -> {
-            MedicationRemovalDialog(
-                onConfirmation = {
-                    callbacks.onRemoval(medication)
-                    removalAlert = false
-
-                },
-                onDismissRequest = {
-                    removalAlert = false
-                },
-                medication = medication
-            )
-        }
+    if (showRemovalDialog) {
+        MedicationRemovalDialog(
+            onConfirmation = {
+                callbacks.onRemoval(medication)
+                showRemovalDialog = false
+            },
+            onDismissRequest = {
+                showRemovalDialog = false
+            },
+            medication = medication
+        )
     }
 
     Card(
@@ -103,7 +97,7 @@ fun MedicationListItem(
             DropdownMenuItem(
                 text = { Text(stringResource(id = R.string.delete)) },
                 onClick = {
-                    removalAlert = true
+                    showRemovalDialog = true
                     menuExpanded = false
                 }
             )

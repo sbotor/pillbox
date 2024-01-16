@@ -1,13 +1,13 @@
 package com.sbcf.pillbox.features.medicationreminders.models
 
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDayMask
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeekMask
 
 data class MedicationReminderOverview(
     val id: Long,
     val hour: Int,
     val minute: Int,
     val nextDeliveryTimestamp: Long?,
-    val days: ReminderDayMask,
+    val days: DayOfWeekMask,
     val title: String
 ) {
     val isEnabled
