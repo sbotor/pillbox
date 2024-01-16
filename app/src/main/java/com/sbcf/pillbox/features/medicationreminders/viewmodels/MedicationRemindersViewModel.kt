@@ -10,19 +10,16 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDay
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeek
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculator
 import com.sbcf.pillbox.utils.Clock
-import com.sbcf.pillbox.utils.Formatters
+import com.sbcf.pillbox.utils.DisplayFormatter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +27,8 @@ class MedicationRemindersViewModel @Inject constructor(
     private val repo: MedicationRemindersRepository,
     private val scheduler: MedicationAlarmScheduler,
     private val clock: Clock,
-    private val calculator: ReminderTimestampCalculator
+    private val calculator: ReminderTimestampCalculator,
+    private val formatter: DisplayFormatter
 ) :
     ViewModel() {
     // TODO: This flow is kind of wacky. Need to find a way to determine if the user denied the permission.
@@ -106,16 +104,27 @@ class MedicationRemindersViewModel @Inject constructor(
         }
     }
 
-    fun formatReminderDateTime(reminder: MedicationReminderOverview): String {
+    fun formatNextNotificationTime(reminder: MedicationReminderOverview): String {
         if (reminder.nextDeliveryTimestamp == null) {
             return ""
         }
 
         val cal = clock.fromTimestamp(reminder.nextDeliveryTimestamp)
-        val day = ReminderDay.fromCalendar(cal)
-        val hour = cal.get(Calendar.HOUR_OF_DAY)
-        val minute = cal.get(Calendar.MINUTE)
 
-        return "$day ${Formatters.time(hour, minute)}"
+        return formatter.dateTime(cal)
     }
+
+    fun formatReminderDisplayLabel(reminder: MedicationReminderOverview): String {
+        val displayTime = formatter.time(reminder.hour, reminder.minute)
+        if (reminder.title.isNotEmpty()) {
+            return "${reminder.title} - $displayTime"
+        }
+
+        return displayTime
+    }
+
+    fun formatReminderDisplayTime(reminder: MedicationReminderOverview) =
+        formatter.time(reminder.hour, reminder.minute)
+
+    fun formatShortDayOfWeek(day: DayOfWeek) = formatter.dayOfWeekShort(day)
 }

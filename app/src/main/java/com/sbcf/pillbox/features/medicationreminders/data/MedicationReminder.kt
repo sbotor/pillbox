@@ -2,7 +2,6 @@ package com.sbcf.pillbox.features.medicationreminders.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Calendar
 
 @Entity
 class MedicationReminder {
@@ -15,7 +14,7 @@ class MedicationReminder {
     var lastDeliveryTimestamp = 0L
     var scheduledTimestamp: Long? = null
     var nextDeliveryTimestamp: Long? = null
-    var days = ReminderDayMask()
+    var days = DayOfWeekMask()
 
     // TODO: A service checking if delivery problems occured would be nice
     val isEnabled

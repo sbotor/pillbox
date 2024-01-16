@@ -28,6 +28,7 @@ import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medicationreminders.viewmodels.MedicationRemindersViewModel
 import com.sbcf.pillbox.features.medicationreminders.components.MedicationReminderItem
 import com.sbcf.pillbox.features.medicationreminders.components.MedicationReminderItemCallbacks
+import com.sbcf.pillbox.features.medicationreminders.components.MedicationReminderItemFormatters
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
@@ -94,16 +95,23 @@ private fun MedicationReminderList(
             .padding(horizontal = Dimens.PaddingBig),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        items(vm.reminders) {
+        items(vm.reminders) { x ->
             val callbacks = MedicationReminderItemCallbacks(
                 onClick = onItemClick,
-                onLongClick = { vm.removeReminder(it.id) },
-                onToggle = { vm.toggleReminder(it) }
+                onRemoval = { vm.removeReminder(x.id) },
+                onToggle = { vm.toggleReminder(x) }
+            )
+            val formatters = MedicationReminderItemFormatters(
+                nextNotificationTime = { vm.formatNextNotificationTime(it) },
+                displayLabel = { vm.formatReminderDisplayLabel(it) },
+                shortDayOfWeek = { vm.formatShortDayOfWeek(it) }
             )
             MedicationReminderItem(
-                reminder = it,
+                reminder = x,
                 callbacks = callbacks,
-                dateTimeFormatter = { vm.formatReminderDateTime(it) })
+                displayTime = vm.formatReminderDisplayTime(x),
+                formatters = formatters
+            )
         }
     }
 }

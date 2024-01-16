@@ -1,19 +1,19 @@
 package com.sbcf.pillbox.features.medicationreminders.data
 
-class ReminderDayMask(mask: Int = 0) {
+class DayOfWeekMask(mask: Int = 0) {
     var value = mask and 0b01111111
         private set
 
-    fun set(day: ReminderDay) {
+    fun set(day: DayOfWeek) {
         value = value or day.value
     }
 
     fun set(idx: Int, value: Boolean) {
-        if (idx >= ReminderDay.days.size) {
+        if (idx >= DayOfWeek.days.size) {
             return
         }
 
-        val day = ReminderDay.days[idx]
+        val day = DayOfWeek.days[idx]
         if (value) {
             set(day)
         } else {
@@ -21,15 +21,16 @@ class ReminderDayMask(mask: Int = 0) {
         }
     }
 
-    fun reset(day: ReminderDay) {
+    fun reset(day: DayOfWeek) {
         value = value and day.value.inv()
     }
 
-    fun isSet(day: ReminderDay) = (value and day.value) > 0
+    fun isSet(day: DayOfWeek) = (value and day.value) > 0
 
+    fun isEmpty() = value == 0
     fun isNotEmpty() = value > 0
 
-    fun getSetDays(): List<ReminderDay> {
-        return ReminderDay.days.filter { isSet(it) }
+    fun getSetDays(): List<DayOfWeek> {
+        return DayOfWeek.days.filter { isSet(it) }
     }
 }

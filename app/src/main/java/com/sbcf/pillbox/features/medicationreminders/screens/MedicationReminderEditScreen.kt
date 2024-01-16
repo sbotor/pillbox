@@ -14,7 +14,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -34,10 +33,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.TextInput
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDay
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeek
 import com.sbcf.pillbox.features.medicationreminders.viewmodels.MedicationReminderEditViewModel
 import com.sbcf.pillbox.utils.Dimens
-import com.sbcf.pillbox.utils.Formatters
 import com.sbcf.pillbox.utils.Length
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
@@ -124,7 +122,7 @@ fun EditMedicationReminderScreen(
             )
             Button(onClick = { vm.showTimePicker = true }) {
                 Text(
-                    text = Formatters.time(vm.state.hour, vm.state.minute),
+                    text = vm.formatTime(),
                     style = MaterialTheme.typography.displayLarge
                 )
             }
@@ -135,15 +133,16 @@ fun EditMedicationReminderScreen(
                 horizontalArrangement = Arrangement.Center
             ) {
                 for ((i, toggled) in vm.state.days.withIndex()) {
-                    // TODO: localize this
-                    val label = ReminderDay.days[i].toString()
                     FilterChip(
                         modifier = Modifier.padding(horizontal = Dimens.PaddingNormal),
                         selected = toggled,
                         onClick = { vm.state.toggleDay(i) },
                         label = {
                             val weight = if (toggled) FontWeight.Bold else FontWeight.Normal
-                            Text(text = label, fontWeight = weight)
+                            Text(
+                                text = vm.formatDayOfWeek(DayOfWeek.days[i]),
+                                fontWeight = weight
+                            )
                         })
                 }
             }

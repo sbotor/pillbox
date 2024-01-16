@@ -1,6 +1,7 @@
 package com.sbcf.pillbox.features.medicationreminders.services
 
-import com.sbcf.pillbox.features.medicationreminders.data.ReminderDay
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeek
+import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeekMask
 import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.utils.Clock
 import java.util.Calendar
@@ -13,7 +14,7 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
 
         val nextDelivery = info.nextDeliveryTimestamp ?: Long.MIN_VALUE
         val nowMs = now.timeInMillis
-        if (nowMs <= nextDelivery) {
+        if (isInTheFuture(nowMs, nextDelivery)) {
             return info.nextDeliveryTimestamp
         }
 
@@ -23,12 +24,7 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
         possibleToday.set(Calendar.SECOND, 0)
         possibleToday.set(Calendar.MILLISECOND, 0)
 
-        if (possibleToday.timeInMillis >= nowMs
-            && info.days.isNotEmpty()
-            && info.days.isSet(
-                ReminderDay.fromCalendar(possibleToday)
-            )
-        ) {
+        if (canBeRescheduledToday(nowMs, possibleToday, info.days)) {
             return possibleToday.timeInMillis
         }
 
@@ -36,16 +32,16 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
             return getRepeatingNextDayTimestamp(info, now)
         }
 
-        val nextDay = now.clone() as Calendar
-        nextDay.set(Calendar.HOUR_OF_DAY, 0)
-        nextDay.set(Calendar.MINUTE, 0)
-        nextDay.set(Calendar.SECOND, 0)
-        nextDay.set(Calendar.MILLISECOND, 0)
-        nextDay.add(Calendar.DAY_OF_MONTH, 1)
-        nextDay.set(Calendar.HOUR_OF_DAY, info.hour)
-        nextDay.set(Calendar.MINUTE, info.minute)
+        val tomorrow = now.clone() as Calendar
+        tomorrow.set(Calendar.HOUR_OF_DAY, 0)
+        tomorrow.set(Calendar.MINUTE, 0)
+        tomorrow.set(Calendar.SECOND, 0)
+        tomorrow.set(Calendar.MILLISECOND, 0)
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1)
+        tomorrow.set(Calendar.HOUR_OF_DAY, info.hour)
+        tomorrow.set(Calendar.MINUTE, info.minute)
 
-        return nextDay.timeInMillis
+        return tomorrow.timeInMillis
     }
 
     override fun getEarliestRepeatingTimestamp(info: TimestampInfo): Long? {
@@ -53,7 +49,7 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
 
         val nextDelivery = info.nextDeliveryTimestamp ?: return null
         val nowMs = now.timeInMillis
-        if (nowMs < nextDelivery) {
+        if (isInTheFuture(nowMs, nextDelivery)) {
             return info.nextDeliveryTimestamp
         }
 
@@ -65,7 +61,7 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
     }
 
     private fun getRepeatingNextDayTimestamp(info: TimestampInfo, now: Calendar): Long? {
-        val currentDayOfWeek = ReminderDay.fromCalendar(now)
+        val currentDayOfWeek = DayOfWeek.fromCalendar(now)
         var nextDayOfWeek = currentDayOfWeek.getNextDay()
         var dayDiff = 1
 
@@ -88,5 +84,22 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
         nextTime.set(Calendar.MINUTE, info.minute)
 
         return nextTime.timeInMillis
+    }
+
+    companion object {
+        fun isInTheFuture(nowMs: Long, nextDelivery: Long) = (nowMs <= nextDelivery)
+        fun canBeRescheduledToday(
+            nowMs: Long,
+            possibleToday: Calendar,
+            enabledDays: DayOfWeekMask
+        ): Boolean {
+            if (possibleToday.timeInMillis < nowMs && enabledDays.isEmpty()) {
+                return false
+            }
+
+            val currentDay = DayOfWeek.fromCalendar(possibleToday)
+
+            return enabledDays.isSet(currentDay)
+        }
     }
 }
