@@ -8,6 +8,10 @@ object Length {
         const val MaxDosageLength = 100
     }
 
+    object MedicationReminder {
+        const val MaxTitleLength = 50
+    }
+
     object SearchField {
         const val MaxLength = 50
     }

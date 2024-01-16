@@ -6,6 +6,7 @@
     <string name="back">Wróć</string>
     <string name="edit">Edytuj</string>
     <string name="save">Zapisz</string>
+    <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="delete">Usuń</string>
 
@@ -13,7 +14,7 @@
     <string name="validation_min_length">Minimalna liczba znaków to</string>
     <string name="validation_max_length">Maksymalna liczba znaków to</string>
 
-    <string name="medications_list_title">Leki</string>
+    <string name="medication_list_title">Leki</string>
     <string name="add_medication_desc">Dodaj nowy lek</string>
     <string name="medication_name">Nazwa leku</string>
     <string name="medication_description">Opis leku</string>
@@ -21,17 +22,38 @@
     <string name="medication_dosage_placeholder">Opcjonalny opis dawkowania leku</string>
     <string name="add_medication">Dodaj lek</string>
     <string name="medication_details">Dane leku</string>
-    <string name="mediaction_removal">Usuwanie leku</string>
+    <string name="medication_removal_title">Usuwanie leku</string>
+    <string name="medication_removal_message">Czy na pewno chcesz usunąć ten lek?</string>
+    <string name="medication_list_empty">Brak leków</string>
 
+    <string name="medication_reminder_list_title">Przypomnienia o lekach</string>
+    <string name="add_medication_reminder_desc">Dodaj nowe przypomnienie</string>
     <string name="medication_notification_channel_name">Przypomnienia o lekach</string>
     <string name="medication_notification_title">Czas na leki</string>
+    <string name="medication_reminder_removal_title">Usuwanie przypomnienia</string>
+    <string name="medication_reminder_removal_message">Czy na pewno chcesz usunąć to przypomnienie?</string>
 
     <string name="notifications_disabled">Powiadomienia są wyłączone</string>
     <string name="enable_notifications">Włącz powiadomienia</string>
 
-    <string name="home_page">Strona główna</string>
-    <string name="medication">Leki</string>
-    <string name="alarms">Alarmy</string>
+    <string name="home_page_nav">Strona główna</string>
+    <string name="medication_nav">Leki</string>
+    <string name="medication_reminders">Przypomnienia</string>
     <string name="amount">Ilość</string>
     <string name="dosage">Dawkowanie</string>
+
+    <string name="monday">Poniedziałek</string>
+    <string name="tuesday">Wtorek</string>
+    <string name="wednesday">Środa</string>
+    <string name="thursday">Czwartek</string>
+    <string name="friday">Piątek</string>
+    <string name="saturday">Sobota</string>
+    <string name="sunday">Niedziela</string>
+    <string name="monday_short">Pn</string>
+    <string name="tuesday_short">Wt</string>
+    <string name="wednesday_short">Śr</string>
+    <string name="thursday_short">Cz</string>
+    <string name="friday_short">Pt</string>
+    <string name="saturday_short">Sb</string>
+    <string name="sunday_short">Nd</string>
 </resources>

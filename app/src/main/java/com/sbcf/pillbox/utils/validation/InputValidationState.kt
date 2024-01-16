@@ -18,9 +18,9 @@ class InputValidationState(private val validators: List<ValidatorFn>) {
         isDirty = value
     }
 
-    fun validate(value: String): String? {
+    fun validate(value: String): Boolean {
         if (validators.isEmpty()) {
-            return null
+            return true
         }
 
         for (validator in validators) {
@@ -38,10 +38,10 @@ class InputValidationState(private val validators: List<ValidatorFn>) {
         updateState(true, null)
     }
 
-    private fun updateState(isValid: Boolean, error: String?): String? {
+    private fun updateState(isValid: Boolean, error: String?): Boolean {
         this.isValid = isValid
         this.error = error
 
-        return error
+        return isValid
     }
 }

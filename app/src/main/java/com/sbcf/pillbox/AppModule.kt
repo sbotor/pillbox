@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.sbcf.pillbox.data.AppDatabase
 import com.sbcf.pillbox.utils.Clock
 import com.sbcf.pillbox.utils.ClockImpl
+import com.sbcf.pillbox.utils.DisplayFormatter
+import com.sbcf.pillbox.utils.DisplayFormatterImpl
 import com.sbcf.pillbox.utils.validation.InputValidators
 import com.sbcf.pillbox.utils.validation.InputValidatorsImpl
 import dagger.Module
@@ -30,4 +32,8 @@ class AppModule {
     @Provides
     @Singleton
     fun provideClock(): Clock = ClockImpl()
+
+    @Provides
+    @Singleton
+    fun provideDisplayFormatter(@ApplicationContext context: Context): DisplayFormatter = DisplayFormatterImpl(context)
 }

@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MedicationListViewModel @Inject constructor(private val repo: MedicationsRepository) :
     ViewModel() {
-    private var allMedications = listOf<MedicationOverview>()
+    private var allMedications = emptyList<MedicationOverview>()
 
     var medications by mutableStateOf(listOf<MedicationOverview>())
         private set
@@ -23,10 +23,9 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
     var textFilter by mutableStateOf("")
         private set
 
-    fun fetchMedications() {
-        viewModelScope.launch {
-            fetchMedicationsCore()
-        }
+    suspend fun fetchMedications() {
+        allMedications = repo.getAllMedications()
+        medications = allMedications
     }
 
     fun searchByName(text: String = "") {
@@ -53,15 +52,10 @@ class MedicationListViewModel @Inject constructor(private val repo: MedicationsR
         medications = allMedications
     }
 
-    fun removeMedication(medicationId: Int){
+    fun removeMedication(medicationId: Int) {
         viewModelScope.launch {
             repo.removeMedicationById(medicationId)
-            fetchMedicationsCore()
+            fetchMedications()
         }
-    }
-
-    private suspend fun fetchMedicationsCore() {
-        allMedications = repo.getAllMedications()
-        medications = allMedications
     }
 }

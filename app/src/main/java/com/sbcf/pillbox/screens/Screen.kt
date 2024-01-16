@@ -6,8 +6,9 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = emptyList()) {
-    data object MedicationList : Screen("medications")
+    data object Home : Screen("home")
 
+    data object MedicationList : Screen("medications/list")
     data object AddMedication : Screen("medications/add")
     data object MedicationDetails :
         Screen(
@@ -28,6 +29,6 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
         }
     }
 
-    data object Home : Screen("home")
-    data object Medication : Screen("medication") //TODO: better route?
+    data object MedicationReminders : Screen("medicationReminders")
+    data object AddMedicationReminder : Screen("medicationReminders/add")
 }

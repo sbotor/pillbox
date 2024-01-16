@@ -14,6 +14,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,16 +28,23 @@ import com.sbcf.pillbox.features.medications.viewmodels.MedicationFormViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Length
 
+data class MedicationDetailsCallbacks(
+    val onBackClick: () -> Unit,
+    val onSaveClick: () -> Unit
+)
+
 @Composable
 fun MedicationDetailsScreen(
     medicationId: Int,
     initiallyEditable: Boolean,
     vm: MedicationFormViewModel = hiltViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit
 ) = MedicationFormScreen(
     vm,
-    onBackClick,
-    onSaveClick = { vm.saveMedication(callback = { vm.toggleEditing() }) }) {
+    MedicationDetailsCallbacks(
+        onBackClick = onBackClick,
+        onSaveClick = { vm.saveMedication(callback = { vm.toggleEditing() }) })
+) {
     vm.fetchMedication(medicationId, initiallyEditable)
 }
 
@@ -46,8 +54,10 @@ fun AddMedicationScreen(
     onBackClick: () -> Unit = {}
 ) = MedicationFormScreen(
     vm,
-    onBackClick,
-    onSaveClick = { vm.saveMedication(callback = onBackClick) }) {
+    MedicationDetailsCallbacks(
+        onBackClick = onBackClick,
+        onSaveClick = { vm.saveMedication(callback = onBackClick) })
+) {
     vm.resetForm()
 }
 
@@ -55,11 +65,12 @@ fun AddMedicationScreen(
 @Composable
 private fun MedicationFormScreen(
     vm: MedicationFormViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
-    onSaveClick: () -> Unit,
-    onInit: () -> Unit
+    callbacks: MedicationDetailsCallbacks,
+    onInit: suspend () -> Unit
 ) {
-    onInit()
+    LaunchedEffect(key1 = vm, key2 = onInit, block = {
+        onInit()
+    })
 
     Scaffold(topBar = {
         TopAppBar(
@@ -70,7 +81,7 @@ private fun MedicationFormScreen(
             },
             navigationIcon = {
                 IconButton(
-                    onClick = onBackClick
+                    onClick = callbacks.onBackClick
                 ) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
@@ -81,7 +92,7 @@ private fun MedicationFormScreen(
                 MedicationFormActions(
                     isCreating = vm.isCreating,
                     isEditable = vm.isEditable,
-                    onSaveClick = onSaveClick,
+                    onSaveClick = { callbacks.onSaveClick() },
                     onEditToggle = vm::toggleEditing
                 )
             })
