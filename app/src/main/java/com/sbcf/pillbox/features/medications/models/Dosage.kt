@@ -5,14 +5,14 @@ data class Dosage (
     var amount : Int,
     var unit : DosageUnit,
     var interval: Int,
-    var intervalType: TimeInterval
+    var intervalType: DosageTimeInterval
 )
 {
     companion object
     {
         fun default() : Dosage
         {
-            return Dosage( 1, DosageUnit.PILL, 1, TimeInterval.DAY)
+            return Dosage( 1, DosageUnit.PILL, 1, DosageTimeInterval.DAY)
         }
     }
 
@@ -39,7 +39,7 @@ enum class DosageUnit(val shortcut: String)
     }
 }
 
-enum class TimeInterval(private val singular:String, private val plural1: String, private val plural2: String)
+enum class DosageTimeInterval(private val singular:String, private val plural1: String, private val plural2: String)
 {
     DAY("dzień", "dni", "dni"),
     WEEK("tydzień", "tygodnie", "tygodni"),

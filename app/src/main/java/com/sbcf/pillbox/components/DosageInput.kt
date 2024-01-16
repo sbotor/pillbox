@@ -16,10 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medications.models.Dosage
+import com.sbcf.pillbox.features.medications.models.DosageTimeInterval
 import com.sbcf.pillbox.features.medications.models.DosageUnit
-import com.sbcf.pillbox.features.medications.models.TimeInterval
 import kotlin.reflect.KProperty0
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,41 +30,9 @@ fun DosageInput(
     isEditable: KProperty0<Boolean>
 ){
     var unitIsExpanded by remember { mutableStateOf(false)}
-    /*var amount by remember { mutableStateOf(dosage.amount.toString()) }*/
-
     var intervalIsExpanded by remember { mutableStateOf(false) }
-    /*var interval by remember { mutableStateOf(dosage.interval.toString())}*/
-
-
-    /*if(amount.isNotEmpty())
-        amount = dosage.amount.toString()
-
-    if(interval.isNotEmpty())
-        interval = dosage.interval.toString()*/
-
-
 
     Row {
-        /*TextField(
-            value = amount,
-            onValueChange = {
-                if(it.length < 3)
-                {
-                    amount = it
-                    if(amount.isNotEmpty())
-                    {
-                        dosage.amount = amount.trim().toInt()
-                    }
-                }
-            },
-            label = { Text( stringResource(id = R.string.amount)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-            modifier = Modifier
-                .width(100.dp)
-                .padding(10.dp),
-            enabled = isEditable
-        )*/
-
         NumberField(
             state = dosage::amount,
             isEditable = isEditable.get(),
@@ -110,30 +79,10 @@ fun DosageInput(
             }
         }
     }
-    Row (modifier = Modifier.padding(20.dp)){
-        Text(text = " co ")
+    Row (modifier = Modifier.padding(10.dp)){
+        Text(text = " co ", fontSize = 20.sp)
     }
     Row{
-        /*TextField(
-            value = interval,
-            onValueChange = {
-                if(it.length < 4)
-                {
-                    interval = it
-                    if(interval.isNotEmpty())
-                    {
-                        dosage.interval = interval.trim().toInt()
-                    }
-                }
-            },
-            label = { Text(stringResource(id = R.string.amount)) },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-            modifier = Modifier
-                .width(100.dp)
-                .padding(10.dp),
-            enabled = isEditable
-        )*/
-
         NumberField(
             state = dosage::interval,
             isEditable = isEditable.get(),
@@ -169,7 +118,7 @@ fun DosageInput(
                 expanded = intervalIsExpanded,
                 onDismissRequest = { intervalIsExpanded = false }
             ) {
-                for (value in TimeInterval.entries) {
+                for (value in DosageTimeInterval.entries) {
                     DropdownMenuItem(
                         text = { Text(text = value.getName(dosage.interval)) },
                         onClick = {

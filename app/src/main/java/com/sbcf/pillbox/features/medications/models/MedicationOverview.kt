@@ -5,7 +5,7 @@ data class MedicationOverview(val id: Int,
                               val amount : Int,
                               val unit : DosageUnit,
                               val interval: Int,
-                              val intervalType: TimeInterval
+                              val intervalType: DosageTimeInterval
 )
 {
     fun getDosage() : Dosage = Dosage(amount, unit, interval, intervalType)

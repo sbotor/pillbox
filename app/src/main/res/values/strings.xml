@@ -33,4 +33,5 @@
     <string name="medication">Leki</string>
     <string name="alarms">Alarmy</string>
     <string name="amount">Ilość</string>
+    <string name="dosage">Dawkowanie</string>
 </resources>
