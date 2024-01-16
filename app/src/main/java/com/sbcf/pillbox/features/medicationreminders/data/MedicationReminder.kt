@@ -5,7 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 class MedicationReminder {
-    // TODO: Make this immutable
     @PrimaryKey(autoGenerate = true)
     var id = 0L
     var title = ""

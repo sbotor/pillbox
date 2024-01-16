@@ -30,7 +30,7 @@ class MedicationAlarmReceiver : BroadcastReceiver() {
                 return@launchGlobalAsync
             }
 
-            publisher.publish(notification)
+            publisher.publishAndCalculateNextTimestamp(notification)
             repo.update(notification)
         }
     }

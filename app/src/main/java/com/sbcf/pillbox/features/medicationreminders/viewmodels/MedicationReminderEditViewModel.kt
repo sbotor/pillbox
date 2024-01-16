@@ -30,11 +30,11 @@ class MedicationReminderEditViewModel @Inject constructor(
     private val formatter: DisplayFormatter
 ) :
     ViewModel() {
-    class State(now: Calendar) {
+    class State {
         val days = mutableStateListOf(false, false, false, false, false, false, false)
-        var hour by mutableIntStateOf(now.get(Calendar.HOUR_OF_DAY))
+        var hour by mutableIntStateOf(0)
             private set
-        var minute by mutableIntStateOf(now.get(Calendar.MINUTE))
+        var minute by mutableIntStateOf(0)
             private set
         val title = InputState()
 
@@ -51,17 +51,40 @@ class MedicationReminderEditViewModel @Inject constructor(
             this.hour = hour
             this.minute = minute
         }
+
+        fun reset(reminder: MedicationReminder?, now: Calendar) {
+            if (reminder == null) {
+                days.replaceAll { false }
+                hour = now.get(Calendar.HOUR_OF_DAY)
+                minute = now.get(Calendar.MINUTE)
+                title.reset("")
+            } else {
+                var i = 0
+                days.replaceAll { reminder.days.isSet(i++) }
+                hour = reminder.hour
+                minute = reminder.minute
+                title.reset(reminder.title)
+            }
+        }
     }
 
-    private var reminder = MedicationReminder().also {
-        it.hour = clock.now().get(Calendar.HOUR_OF_DAY)
-        it.minute = clock.now().get(Calendar.MINUTE)
-    }
+    private var reminder = MedicationReminder()
     private var isCreated = false
-    private var shouldRecalculateTimestamp = true
 
-    val state = State(clock.now())
+    val state = State()
     var showTimePicker by mutableStateOf(false)
+
+    suspend fun fetchReminder(id: Long?) {
+        if (id == null) {
+            state.reset(null, clock.now())
+            return
+        }
+
+        val rem = repo.get(id)!!
+        reminder = rem
+        state.reset(rem, clock.now())
+        isCreated = true
+    }
 
     fun save() {
         val rem = reminder
@@ -73,17 +96,13 @@ class MedicationReminderEditViewModel @Inject constructor(
             rem.days.set(i, day)
         }
 
-        if (!rem.isEnabled) {
-            rem.enable(Long.MIN_VALUE)
-            shouldRecalculateTimestamp = true
-        }
-
-        if (shouldRecalculateTimestamp) {
-            val tsInfo = TimestampInfo(rem)
-            val timestamp = calculator.getEarliestTimestamp(tsInfo)
-            if (timestamp != null) {
-                rem.enable(timestamp)
-            }
+        rem.enable(Long.MIN_VALUE)
+        val tsInfo = TimestampInfo(rem)
+        val timestamp = calculator.getEarliestTimestamp(tsInfo)
+        if (timestamp != null) {
+            rem.enable(timestamp)
+        } else {
+            rem.disable()
         }
 
         viewModelScope.launch {

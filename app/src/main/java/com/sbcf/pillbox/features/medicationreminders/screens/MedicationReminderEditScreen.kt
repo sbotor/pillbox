@@ -25,6 +25,7 @@ import androidx.compose.material3.TimePicker
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -43,15 +44,19 @@ import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 @Composable
 fun EditMedicationReminderScreen(
     vm: MedicationReminderEditViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    reminderId: Long? = null
 ) {
-    val timePickerState = rememberTimePickerState(
-        initialHour = vm.state.hour,
-        initialMinute = vm.state.minute,
-        is24Hour = true
-    )
+    LaunchedEffect(key1 = vm, key2 = reminderId) {
+        vm.fetchReminder(reminderId)
+    }
 
     if (vm.showTimePicker) {
+        val timePickerState = rememberTimePickerState(
+            initialHour = vm.state.hour,
+            initialMinute = vm.state.minute,
+            is24Hour = true
+        )
         AlertDialog(
             onDismissRequest = { vm.showTimePicker = false },
             modifier = Modifier
@@ -87,27 +92,30 @@ fun EditMedicationReminderScreen(
     }
 
     Scaffold(topBar = {
-        TopAppBar(title = { /*TODO*/ Text(text = "Dodaj przypomnienie") }, navigationIcon = {
-            IconButton(
-                onClick = onBackClick
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(id = R.string.back)
-                )
-            }
-        }, actions = {
-            Button(onClick = {
-                vm.save()
-                onBackClick()
-            }) {
-                Icon(
-                    imageVector = Icons.Filled.Check,
-                    contentDescription = stringResource(id = R.string.save)
-                )
-                Text(text = stringResource(id = R.string.save))
-            }
-        })
+        TopAppBar(
+            title = { Text(text = stringResource(id = R.string.medication_reminder)) },
+            navigationIcon = {
+                IconButton(
+                    onClick = onBackClick
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(id = R.string.back)
+                    )
+                }
+            },
+            actions = {
+                Button(onClick = {
+                    vm.save()
+                    onBackClick()
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Check,
+                        contentDescription = stringResource(id = R.string.save)
+                    )
+                    Text(text = stringResource(id = R.string.save))
+                }
+            })
     }) { padding ->
         Column(
             modifier = Modifier
@@ -117,7 +125,7 @@ fun EditMedicationReminderScreen(
         ) {
             TextInput(
                 state = vm.state.title,
-                label = { /*TODO*/ Text(text = "Tytuł") },
+                label = { Text(text = stringResource(id = R.string.medication_reminder)) },
                 maxLength = Length.MedicationReminder.MaxTitleLength
             )
             Button(onClick = { vm.showTimePicker = true }) {

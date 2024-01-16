@@ -18,7 +18,7 @@ class MedicationReminderPublisherImpl @Inject constructor(
     private val calculator: ReminderTimestampCalculator
 ) :
     MedicationReminderPublisher {
-    override fun publish(reminder: MedicationReminder) {
+    override fun publishAndCalculateNextTimestamp(reminder: MedicationReminder) {
         val notificationManager = getManager()
         if (!notificationManager.areNotificationsEnabled()) {
             return

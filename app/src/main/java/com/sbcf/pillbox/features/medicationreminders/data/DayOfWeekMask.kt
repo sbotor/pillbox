@@ -27,6 +27,14 @@ class DayOfWeekMask(mask: Int = 0) {
 
     fun isSet(day: DayOfWeek) = (value and day.value) > 0
 
+    fun isSet(idx: Int): Boolean {
+        if (idx >= DayOfWeek.days.size) {
+            return false
+        }
+
+        return isSet(DayOfWeek.days[idx])
+    }
+
     fun isEmpty() = value == 0
     fun isNotEmpty() = value > 0
 

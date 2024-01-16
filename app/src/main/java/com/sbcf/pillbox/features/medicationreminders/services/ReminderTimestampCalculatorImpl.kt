@@ -93,8 +93,12 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
             possibleToday: Calendar,
             enabledDays: DayOfWeekMask
         ): Boolean {
-            if (possibleToday.timeInMillis < nowMs && enabledDays.isEmpty()) {
+            if (possibleToday.timeInMillis < nowMs) {
                 return false
+            }
+
+            if (enabledDays.isEmpty()) {
+                return true
             }
 
             val currentDay = DayOfWeek.fromCalendar(possibleToday)
