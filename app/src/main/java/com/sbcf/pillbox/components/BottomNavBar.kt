@@ -14,20 +14,17 @@ import com.sbcf.pillbox.utils.NavItem
 
 @Composable
 fun BottomNavBar(navController: NavController) {
-    val items = listOf(
-        NavItem.Home,
-        NavItem.Medication
-    )
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
+
     NavigationBar {
-        items.forEach { item ->
+        NavItem.allItems.forEach { item ->
+            val label = stringResource(id = item.titleId)
             NavigationBarItem(
-                selected = currentRoute == item.route,
-                onClick = { navController.navigate(item.route) },
-                icon = { Icon(painterResource(id = item.icon), contentDescription = null) },
-                label = { Text(stringResource(id = item.title)) }
+                selected = currentRoute?.startsWith(item.route) ?: false,
+                onClick = { if (currentRoute != item.route) navController.navigate(item.route) },
+                icon = { Icon(painterResource(id = item.iconId), contentDescription = label) },
+                label = { Text(label) }
             )
         }
     }

@@ -7,9 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
+import com.sbcf.pillbox.utils.validation.InputFields
 import com.sbcf.pillbox.utils.Length
-import com.sbcf.pillbox.utils.validation.InputState
-import com.sbcf.pillbox.utils.validation.InputValidationState
 import com.sbcf.pillbox.utils.validation.InputValidators
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -21,14 +20,16 @@ class MedicationFormViewModel @Inject constructor(
     validators: InputValidators
 ) : ViewModel() {
     class State(validators: InputValidators) {
-        var name = InputState(
-            InputValidationState(
-                validators::required,
-                validators.minLength(Length.Medication.MinNameLength)
-            )
+        private val fields = InputFields()
+
+        var name = fields.create(
+            validators::required,
+            validators.minLength(Length.Medication.MinNameLength)
         )
-        var description = InputState()
-        var dosage = InputState()
+        var description = fields.create()
+        var dosage = fields.create()
+
+        fun validate() = fields.validate()
     }
 
     private var medicationId = 0
@@ -41,6 +42,10 @@ class MedicationFormViewModel @Inject constructor(
         private set
 
     fun saveMedication(callback: () -> Unit) {
+        if (!state.validate()) {
+            return
+        }
+
         val medication = Medication(
             medicationId,
             name = state.name.value,
@@ -58,17 +63,16 @@ class MedicationFormViewModel @Inject constructor(
         }
     }
 
-    fun fetchMedication(id: Int, enableEditing: Boolean = false) {
+    suspend fun fetchMedication(id: Int, enableEditing: Boolean = false) {
         isCreating = false
         isEditable = false
-        viewModelScope.launch {
-            val med = repo.getMedication(id)!!
-            resetForm(med)
-            medicationId = med.id
 
-            if (enableEditing) {
-                isEditable = true
-            }
+        val med = repo.getMedication(id)!!
+        resetForm(med)
+        medicationId = med.id
+
+        if (enableEditing) {
+            isEditable = true
         }
     }
 

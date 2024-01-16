@@ -27,6 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sbcf.pillbox.R
+import com.sbcf.pillbox.components.ListItemSpacer
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.utils.Dimens
 
@@ -63,7 +64,7 @@ fun MedicationListItem(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth()
             .combinedClickable(
                 onClick = { callbacks.onOpen(medication) },
                 onLongClick = { menuExpanded = true }
@@ -106,12 +107,7 @@ fun MedicationListItem(
                     menuExpanded = false
                 }
             )
-
         }
     }
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(20.dp)
-    )
+    ListItemSpacer()
 }
