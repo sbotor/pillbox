@@ -1,11 +1,38 @@
 package com.sbcf.pillbox.features.home.viewmodels
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
+import com.sbcf.pillbox.utils.Clock
+import com.sbcf.pillbox.utils.DisplayFormatter
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
-    //To be continued...
+@HiltViewModel
+class HomeViewModel
+@Inject constructor(
+    private val reminderRepo: MedicationRemindersRepository,
+    private val clock: Clock,
+    private val formatter: DisplayFormatter
+) : ViewModel() {
+    var reminder: MedicationReminder? by mutableStateOf(MedicationReminder())
+        private set
 
-    fun getTextTest() : String {
-        return "To jest strona główna"
+    suspend fun fetchInformation() {
+        reminder = reminderRepo.getNext()
+    }
+
+    //TODO: unify this together with the function in MedicationReminderViewModel
+    fun formatNextNotificationTime(timestamp: Long?): String {
+        if (timestamp == null) {
+            return ""
+        }
+
+        val cal = clock.fromTimestamp(timestamp)
+
+        return formatter.dateTime(cal)
     }
 }

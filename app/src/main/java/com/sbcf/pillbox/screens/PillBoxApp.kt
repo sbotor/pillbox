@@ -9,12 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import com.sbcf.pillbox.components.BottomNavBar
 import com.sbcf.pillbox.features.home.screens.HomeScreen
 import com.sbcf.pillbox.features.medicationreminders.screens.EditMedicationReminderScreen
+import com.sbcf.pillbox.features.medicationreminders.screens.MedicationRemindersScreen
 import com.sbcf.pillbox.features.medications.screens.AddMedicationScreen
 import com.sbcf.pillbox.features.medications.screens.MedicationDetailsScreen
-import com.sbcf.pillbox.features.medications.screens.MedicationListScreen
-import com.sbcf.pillbox.features.medicationreminders.screens.MedicationRemindersScreen
-import com.sbcf.pillbox.features.medications.screens.MedicationDetailsCallbacks
 import com.sbcf.pillbox.features.medications.screens.MedicationListCallbacks
+import com.sbcf.pillbox.features.medications.screens.MedicationListScreen
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 
 @Composable
@@ -33,7 +32,10 @@ fun PillBoxApp() {
             modifier = Modifier.scaffoldedContent(padding)
         ) {
             composable(Screen.Home.route) {
-                HomeScreen()
+                HomeScreen(
+                    onNextReminderClick = {navController.navigate(Screen.MedicationReminders.route)},
+                    onUnreadReminderClick = { /*TODO*/ }
+                )
             }
 
             composable(Screen.MedicationList.route) {

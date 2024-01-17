@@ -9,6 +9,7 @@ interface MedicationRemindersRepository {
     suspend fun get(id: Int): MedicationReminder?
     suspend fun update(reminder: MedicationReminder)
     suspend fun getAll(): List<MedicationReminderOverview>
+    suspend fun getNext(): MedicationReminder?
     suspend fun changeDeliveryTimestamp(id: Int, value: Long?)
     suspend fun add(reminder: MedicationReminder): Int
     suspend fun deleteById(id: Int)

@@ -13,6 +13,9 @@ interface MedicationReminderDao {
     @Query("SELECT * FROM MedicationReminder WHERE nextDeliveryTimestamp != null")
     suspend fun getAllEnabled(): List<MedicationReminder>
 
+    @Query("SELECT * FROM MedicationReminder WHERE nextDeliveryTimestamp IS NOT null ORDER BY nextDeliveryTimestamp LIMIT 1")
+    suspend fun getNextEnabled() : MedicationReminder?
+
     @Update
     suspend fun updateMany(reminders: List<MedicationReminder>)
 
@@ -22,7 +25,7 @@ interface MedicationReminderDao {
     @Query("SELECT * FROM MedicationReminder WHERE id = :id")
     suspend fun getById(id: Int): MedicationReminder?
 
-    @Query("SELECT id, hour, minute, nextDeliveryTimestamp, days, title FROM MedicationReminder ORDER BY title")
+    @Query("SELECT id, hour, minute, nextDeliveryTimestamp, days, title FROM MedicationReminder ORDER BY hour, minute, title")
     suspend fun getAll(): List<MedicationReminderOverview>
 
     @Query("UPDATE MedicationReminder SET nextDeliveryTimestamp = :value WHERE id = :id")
