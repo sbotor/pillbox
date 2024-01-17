@@ -8,6 +8,10 @@ import androidx.core.app.NotificationCompat
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryEntry
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryEntryData
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryItem
+import com.sbcf.pillbox.features.reminderhistory.data.repositories.ReminderHistoryRepository
 import com.sbcf.pillbox.utils.Clock
 import javax.inject.Inject
 
@@ -15,14 +19,25 @@ class MedicationReminderPublisherImpl @Inject constructor(
     private val context: Context,
     private val clock: Clock,
     private val scheduler: MedicationAlarmScheduler,
-    private val calculator: ReminderTimestampCalculator
+    private val calculator: ReminderTimestampCalculator,
+    private val historyRepo: ReminderHistoryRepository
 ) :
     MedicationReminderPublisher {
-    override fun publishAndCalculateNextTimestamp(reminder: MedicationReminder) {
+    override suspend fun publishAndCalculateNextTimestamp(reminder: MedicationReminder) {
         val notificationManager = getManager()
         if (!notificationManager.areNotificationsEnabled()) {
             return
         }
+
+        val nowTimestamp = clock.now().timeInMillis
+
+        val historyEntry = ReminderHistoryEntry(
+            ReminderHistoryEntryData(0, nowTimestamp, reminder.title), listOf(
+                ReminderHistoryItem(0, 0, "test")
+            )
+        )
+
+        historyRepo.create(historyEntry)
 
         val androidNotification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.medication_24)
@@ -31,9 +46,9 @@ class MedicationReminderPublisherImpl @Inject constructor(
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
-        notificationManager.notify(reminder.id.toInt(), androidNotification)
+        notificationManager.notify(reminder.id, androidNotification)
 
-        reminder.lastDeliveryTimestamp = clock.now().timeInMillis
+        reminder.lastDeliveryTimestamp = nowTimestamp
 
         val tsInfo = TimestampInfo(reminder)
         val nextTimestamp = calculator.getEarliestRepeatingTimestamp(tsInfo)
