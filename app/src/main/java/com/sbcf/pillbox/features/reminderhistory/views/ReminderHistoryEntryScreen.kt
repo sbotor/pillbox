@@ -68,15 +68,21 @@ fun ReminderHistoryEntryScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = vm.formattedDeliveryDateTime,
-                fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+                text = vm.formattedDeliveryDate,
+                style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = vm.formattedDeliveryTime,
+                style = MaterialTheme.typography.headlineMedium,
                 textAlign = TextAlign.Center
             )
             if (vm.description.isNotEmpty()) {
                 Text(
                     text = vm.description,
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    modifier = Modifier.padding(bottom = Dimens.PaddingNormal)
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = Dimens.PaddingNormal),
+                    textAlign = TextAlign.Center
                 )
             }
             Card(
@@ -98,7 +104,7 @@ fun ReminderHistoryEntryScreen(
             if (vm.items.isNotEmpty()) {
                 Text(
                     text = stringResource(id = R.string.reminder_history_medications),
-                    fontSize = MaterialTheme.typography.titleMedium.fontSize,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(top = Dimens.PaddingLarge)
                 )
                 LazyColumn {

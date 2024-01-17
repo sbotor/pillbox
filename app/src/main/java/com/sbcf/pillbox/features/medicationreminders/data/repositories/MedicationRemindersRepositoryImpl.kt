@@ -20,7 +20,7 @@ class MedicationRemindersRepositoryImpl @Inject constructor(
     override suspend fun update(reminder: MedicationReminder) = dao.update(reminder)
 
     override suspend fun getAll(): List<MedicationReminderOverview> = dao.getAll()
-
+    override suspend fun getNext(): MedicationReminder? = dao.getNextEnabled()
     override suspend fun changeDeliveryTimestamp(id: Int, value: Long?) =
         dao.changeDeliveryTimestamp(id, value)
 

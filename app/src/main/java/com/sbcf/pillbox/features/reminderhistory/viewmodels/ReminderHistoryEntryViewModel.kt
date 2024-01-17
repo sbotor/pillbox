@@ -25,7 +25,9 @@ class ReminderHistoryEntryViewModel @Inject constructor(
         private set
     var description by mutableStateOf("")
         private set
-    var formattedDeliveryDateTime by mutableStateOf("")
+    var formattedDeliveryDate by mutableStateOf("")
+        private set
+    var formattedDeliveryTime by mutableStateOf("")
         private set
     var items by mutableStateOf(emptyList<String>())
         private set
@@ -40,8 +42,9 @@ class ReminderHistoryEntryViewModel @Inject constructor(
         isConfirmed = entry.data.isConfirmed
         description = entry.data.description
 
-        formattedDeliveryDateTime =
-            formatter.dayOfTheWeekAndTime(clock.fromTimestamp(entry.data.deliveredTimestamp))
+        val cal = clock.fromTimestamp(entry.data.deliveredTimestamp)
+        formattedDeliveryDate = formatter.dayOfWeekAndFullDate(cal)
+        formattedDeliveryTime = formatter.time(cal)
 
         items = entry.items.sortedBy { it.ordinal }.map { it.description }.toList()
     }

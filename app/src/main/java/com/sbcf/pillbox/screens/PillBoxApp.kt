@@ -28,7 +28,7 @@ fun PillBoxApp() {
             startDestination = HomeScreens.Home.route,
             modifier = Modifier.scaffoldedContent(padding)
         ) {
-            home()
+            home(navController)
             medications(navController)
             medicationReminders(navController)
             reminderHistory(navController)
