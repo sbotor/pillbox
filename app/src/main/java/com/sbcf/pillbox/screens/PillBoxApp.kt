@@ -66,10 +66,26 @@ fun PillBoxApp() {
             composable(Screen.MedicationReminders.route) {
                 MedicationRemindersScreen(
                     onAddClick = { navController.navigate(Screen.AddMedicationReminder.route) },
-                    onItemClick = { /*TODO*/ })
+                    onItemClick = {
+                        navController.navigate(
+                            Screen.EditMedicationReminder.createRoute(
+                                it.id
+                            )
+                        )
+                    })
             }
             composable(Screen.AddMedicationReminder.route) {
                 EditMedicationReminderScreen(onBackClick = { navController.navigateUp() })
+            }
+            composable(
+                Screen.EditMedicationReminder.route,
+                Screen.EditMedicationReminder.arguments
+            ) {
+                val arguments = it.arguments!!
+                EditMedicationReminderScreen(
+                    onBackClick = { navController.navigateUp() },
+                    reminderId = Screen.EditMedicationReminder.getReminderId(arguments)
+                )
             }
         }
     }

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
 import com.sbcf.pillbox.utils.validation.InputFields
-import com.sbcf.pillbox.features.medications.models.Dosage
+import com.sbcf.pillbox.features.medications.models.DosageState
 import com.sbcf.pillbox.utils.Length
 import com.sbcf.pillbox.utils.validation.InputValidators
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,7 +28,7 @@ class MedicationFormViewModel @Inject constructor(
             validators.minLength(Length.Medication.MinNameLength)
         )
         var description = fields.create()
-        var dosage = Dosage.default()
+        var dosage = DosageState()
 
         fun validate() = fields.validate()
     }
@@ -98,7 +98,7 @@ class MedicationFormViewModel @Inject constructor(
             state.description.reset("")
         } else {
             state.name.reset(med.name)
-            state.dosage.reset(med.getDosage())
+            state.dosage.reset(med)
             state.description.reset(med.description)
         }
     }

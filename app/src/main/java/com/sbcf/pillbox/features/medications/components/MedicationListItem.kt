@@ -78,7 +78,7 @@ fun MedicationListItem(
             )
             Column(modifier = Modifier.fillMaxSize()) {
                 Text(text = medication.name, style = MaterialTheme.typography.headlineSmall)
-                Text(text = medication.getDosage().toString())
+                Text(text = medication.getDosageString())
             }
         }
         DropdownMenu(

@@ -89,29 +89,44 @@ private fun MedicationReminderList(
     LaunchedEffect(key1 = vm) {
         vm.fetchReminders()
     }
-    LazyColumn(
-        modifier = Modifier
-            .scaffoldedContent(padding)
-            .padding(horizontal = Dimens.PaddingBig),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        items(vm.reminders) { x ->
-            val callbacks = MedicationReminderItemCallbacks(
-                onClick = onItemClick,
-                onRemoval = { vm.removeReminder(x.id) },
-                onToggle = { vm.toggleReminder(x) }
-            )
-            val formatters = MedicationReminderItemFormatters(
-                nextNotificationTime = { vm.formatNextNotificationTime(it) },
-                displayLabel = { vm.formatReminderDisplayLabel(it) },
-                shortDayOfWeek = { vm.formatShortDayOfWeek(it) }
-            )
-            MedicationReminderItem(
-                reminder = x,
-                callbacks = callbacks,
-                displayTime = vm.formatReminderDisplayTime(x),
-                formatters = formatters
-            )
+
+    val alignment = Alignment.CenterHorizontally
+    val modifier = Modifier
+        .scaffoldedContent(padding)
+        .padding(horizontal = Dimens.PaddingBig)
+
+    if (vm.reminders.isEmpty()) {
+        Column(
+            horizontalAlignment = alignment,
+            modifier = modifier
+        ) {
+            Text(text = stringResource(id = R.string.medication_reminder_list_empty))
+        }
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .scaffoldedContent(padding)
+                .padding(horizontal = Dimens.PaddingBig),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            items(vm.reminders) { x ->
+                val callbacks = MedicationReminderItemCallbacks(
+                    onClick = onItemClick,
+                    onRemoval = { vm.removeReminder(x.id) },
+                    onToggle = { vm.toggleReminder(x) }
+                )
+                val formatters = MedicationReminderItemFormatters(
+                    nextNotificationTime = { vm.formatNextNotificationTime(it) },
+                    displayLabel = { vm.formatReminderDisplayLabel(it) },
+                    shortDayOfWeek = { vm.formatShortDayOfWeek(it) }
+                )
+                MedicationReminderItem(
+                    reminder = x,
+                    callbacks = callbacks,
+                    displayTime = vm.formatReminderDisplayTime(x),
+                    formatters = formatters
+                )
+            }
         }
     }
 }

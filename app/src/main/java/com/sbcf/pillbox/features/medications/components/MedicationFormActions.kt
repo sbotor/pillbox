@@ -29,6 +29,7 @@ fun MedicationFormActions(
             Text(text = stringResource(id = R.string.add_medication))
         }
     } else if (isEditable) {
+        // TODO: This does not clear the data that was changed
         IconButton(onClick = onEditToggle) {
             Icon(
                 imageVector = Icons.Filled.Close,

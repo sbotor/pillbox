@@ -23,13 +23,13 @@ interface MedicationReminderDao {
     suspend fun update(reminder: MedicationReminder)
 
     @Query("SELECT * FROM MedicationReminder WHERE id = :id")
-    suspend fun getById(id: Long): MedicationReminder?
+    suspend fun getById(id: Int): MedicationReminder?
 
     @Query("SELECT id, hour, minute, nextDeliveryTimestamp, days, title FROM MedicationReminder ORDER BY hour, minute, title")
     suspend fun getAll(): List<MedicationReminderOverview>
 
     @Query("UPDATE MedicationReminder SET nextDeliveryTimestamp = :value WHERE id = :id")
-    suspend fun changeDeliveryTimestamp(id: Long, value: Long?)
+    suspend fun changeDeliveryTimestamp(id: Int, value: Long?)
 
     @Query("UPDATE MedicationReminder SET scheduledTimestamp = null WHERE scheduledTimestamp != null")
     suspend fun invalidateAll()
@@ -38,5 +38,5 @@ interface MedicationReminderDao {
     suspend fun add(reminder: MedicationReminder): Long
 
     @Query("DELETE FROM MedicationReminder WHERE id = :id")
-    suspend fun delete(id: Long)
+    suspend fun delete(id: Int)
 }

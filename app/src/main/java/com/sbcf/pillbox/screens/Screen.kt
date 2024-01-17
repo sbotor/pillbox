@@ -31,4 +31,14 @@ sealed class Screen(val route: String, val arguments: List<NamedNavArgument> = e
 
     data object MedicationReminders : Screen("medicationReminders")
     data object AddMedicationReminder : Screen("medicationReminders/add")
+    data object EditMedicationReminder : Screen(
+        "medicationReminders/edit/{reminderId}", listOf(
+            navArgument("reminderId") { type = NavType.IntType })
+    ) {
+        fun createRoute(reminderId: Int) = "medicationReminders/edit/$reminderId"
+
+        fun getReminderId(bundle: Bundle): Int {
+            return bundle.getInt(arguments[0].name)
+        }
+    }
 }

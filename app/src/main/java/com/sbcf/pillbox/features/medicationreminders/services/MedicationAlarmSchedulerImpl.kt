@@ -27,18 +27,17 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
         schedule(getAlarmManager(), reminder)
     }
 
+    override fun unschedule(reminder: MedicationReminder) {
+        val intent = getIntent(reminder.id) ?: return
+
+        val alarmManager = getAlarmManager()
+        alarmManager.cancel(intent)
+    }
+
     private fun schedule(alarmManager: AlarmManager, reminder: MedicationReminder) {
         var deliveryTimestamp = reminder.nextDeliveryTimestamp ?: return
 
-        val intent = Intent().also {
-            it.component =
-                ComponentName(context, MedicationAlarmReceiver::class.java)
-            it.action = MedicationAlarmReceiver.ACTION
-            it.data = MedicationAlarmReceiver.createData(reminder.id)
-        }
-
-        val pendingIntent =
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        val intent = getOrCreateIntent(reminder.id)
 
         val now = clock.now().timeInMillis
         if (now > deliveryTimestamp) {
@@ -49,7 +48,7 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
             alarmManager,
             AlarmManager.RTC,
             deliveryTimestamp,
-            pendingIntent
+            intent
         )
 
         reminder.scheduledTimestamp = deliveryTimestamp
@@ -57,5 +56,33 @@ class MedicationAlarmSchedulerImpl @Inject constructor(
 
     private fun getAlarmManager(): AlarmManager {
         return context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    }
+
+    private fun getOrCreateIntent(reminderId: Int): PendingIntent =
+        getIntentCore(
+            reminderId,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )!!
+
+    private fun getIntent(reminderId: Int): PendingIntent? =
+        getIntentCore(
+            reminderId,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_NO_CREATE
+        )
+
+    private fun getIntentCore(reminderId: Int, flags: Int): PendingIntent? {
+        val intent = Intent().also {
+            it.component =
+                ComponentName(context, MedicationAlarmReceiver::class.java)
+            it.action = MedicationAlarmReceiver.ACTION
+            it.data = MedicationAlarmReceiver.createData(reminderId)
+        }
+
+        return PendingIntent.getBroadcast(
+            context,
+            reminderId,
+            intent,
+            flags
+        )
     }
 }
