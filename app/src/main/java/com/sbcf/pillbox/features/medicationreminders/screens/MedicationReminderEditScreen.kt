@@ -45,7 +45,7 @@ import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
 fun EditMedicationReminderScreen(
     vm: MedicationReminderEditViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    reminderId: Long? = null
+    reminderId: Int? = null
 ) {
     LaunchedEffect(key1 = vm, key2 = reminderId) {
         vm.fetchReminder(reminderId)

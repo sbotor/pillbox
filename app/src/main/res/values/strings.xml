@@ -37,6 +37,7 @@
     <string name="medication_reminders">Przypomnienia</string>
     <string name="medication_reminder">Przypomnienie</string>
     <string name="medication_reminder_title">Tytuł</string>
+    <string name="medication_reminder_list_empty">Brak przypomnień</string>
 
     <string name="notifications_disabled">Powiadomienia są wyłączone</string>
     <string name="enable_notifications">Włącz powiadomienia</string>

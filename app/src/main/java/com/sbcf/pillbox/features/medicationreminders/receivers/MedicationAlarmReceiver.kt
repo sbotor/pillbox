@@ -38,17 +38,17 @@ class MedicationAlarmReceiver : BroadcastReceiver() {
     companion object {
         const val ACTION = "com.sbcf.pillbox.NOTIFICATION_ALARM"
 
-        fun createData(notificationId: Long): Uri {
+        fun createData(notificationId: Int): Uri {
             return Uri.parse("content://medicationNotifications/$notificationId")
         }
 
-        private fun parseNotificationId(intent: Intent): Long? {
+        private fun parseNotificationId(intent: Intent): Int? {
             val str = intent.data?.lastPathSegment
             if (str.isNullOrEmpty()) {
                 return null
             }
 
-            return str.toLongOrNull()
+            return str.toIntOrNull()
         }
     }
 }

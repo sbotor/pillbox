@@ -74,7 +74,7 @@ class MedicationReminderEditViewModel @Inject constructor(
     val state = State()
     var showTimePicker by mutableStateOf(false)
 
-    suspend fun fetchReminder(id: Long?) {
+    suspend fun fetchReminder(id: Int?) {
         if (id == null) {
             state.reset(null, clock.now())
             return

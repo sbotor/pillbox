@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 class MedicationReminder {
     @PrimaryKey(autoGenerate = true)
-    var id = 0L
+    var id = 0
     var title = ""
     var hour = 0
     var minute = 0

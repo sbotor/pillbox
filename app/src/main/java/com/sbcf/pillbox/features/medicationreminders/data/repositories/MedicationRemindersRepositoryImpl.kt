@@ -15,15 +15,19 @@ class MedicationRemindersRepositoryImpl @Inject constructor(
 
     override suspend fun updateMany(reminders: List<MedicationReminder>) = dao.updateMany(reminders)
 
-    override suspend fun get(id: Long): MedicationReminder? = dao.getById(id)
+    override suspend fun get(id: Int): MedicationReminder? = dao.getById(id)
 
     override suspend fun update(reminder: MedicationReminder) = dao.update(reminder)
 
     override suspend fun getAll(): List<MedicationReminderOverview> = dao.getAll()
 
-    override suspend fun changeDeliveryTimestamp(id: Long, value: Long?) =
+    override suspend fun changeDeliveryTimestamp(id: Int, value: Long?) =
         dao.changeDeliveryTimestamp(id, value)
 
-    override suspend fun add(reminder: MedicationReminder) = dao.add(reminder)
-    override suspend fun deleteById(id: Long) = dao.delete(id)
+    override suspend fun add(reminder: MedicationReminder): Int {
+        val id = dao.add(reminder)
+        return id.toInt()
+    }
+
+    override suspend fun deleteById(id: Int) = dao.delete(id)
 }
