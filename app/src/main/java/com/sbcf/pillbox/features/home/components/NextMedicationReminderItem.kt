@@ -13,8 +13,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.sp
+import com.sbcf.pillbox.R
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.utils.Dimens
 
@@ -37,8 +38,8 @@ fun NextMedicationReminderItem(
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    "Nie ma żadnych przyszłych przypomnień", //TODO
-                    fontSize = 30.sp,
+                    stringResource(id = R.string.no_set_reminders),
+                    style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center
                 )
             }
@@ -64,7 +65,7 @@ fun NextMedicationReminderItem(
             Row()
             {
                 Text(
-                    text = "Tutaj mała lista leków maybe?",
+                    text = "TODO: Tutaj mała lista leków.",
                     modifier = Modifier.padding(
                         start = Dimens.PaddingNormal,
                         top = Dimens.PaddingSmall

@@ -39,6 +39,11 @@
     <string name="medication_reminder_title">Tytuł</string>
     <string name="medication_reminder_list_empty">Brak przypomnień</string>
 
+    <string name="home_page_title">Strona główna</string>
+    <string name="next_reminder">Następne przypomnienie</string>
+    <string name="missed_reminders">Przegapione przypomnienia</string>
+    <string name="no_set_reminders">Nie ma żadnych ustawionych przypomnień</string>
+
     <string name="notifications_disabled">Powiadomienia są wyłączone</string>
     <string name="enable_notifications">Włącz powiadomienia</string>
 
