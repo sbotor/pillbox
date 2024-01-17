@@ -3,6 +3,7 @@ package com.sbcf.pillbox.features.medications.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.sbcf.pillbox.features.medications.models.Dosage
+import com.sbcf.pillbox.features.medications.models.DosageState
 import com.sbcf.pillbox.features.medications.models.DosageTimeInterval
 import com.sbcf.pillbox.features.medications.models.DosageUnit
 
@@ -13,11 +14,8 @@ data class Medication(
     val description: String,
 
     //Dosage
-    var amount : Int,
-    var unit : DosageUnit,
-    var interval: Int,
-    var intervalType: DosageTimeInterval
-)
-{
-    fun getDosage() : Dosage = Dosage(this.amount, this.unit, this.interval, this.intervalType)
-}
+    override var amount : Int,
+    override var unit : DosageUnit,
+    override var interval: Int,
+    override var intervalType: DosageTimeInterval
+) : Dosage
