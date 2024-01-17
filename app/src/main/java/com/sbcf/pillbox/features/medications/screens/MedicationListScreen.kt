@@ -85,7 +85,7 @@ fun MedicationListScreen(
         val alignment = Alignment.CenterHorizontally
         val modifier = Modifier
             .scaffoldedContent(padding)
-            .padding(horizontal = Dimens.PaddingBig)
+            .padding(horizontal = Dimens.PaddingLarge)
 
         if (vm.medications.isEmpty()) {
             Column(

@@ -112,7 +112,7 @@ class MedicationRemindersViewModel @Inject constructor(
 
         val cal = clock.fromTimestamp(reminder.nextDeliveryTimestamp)
 
-        return formatter.dateTime(cal)
+        return formatter.dayOfTheWeekAndTime(cal)
     }
 
     fun formatReminderDisplayLabel(reminder: MedicationReminderOverview): String {

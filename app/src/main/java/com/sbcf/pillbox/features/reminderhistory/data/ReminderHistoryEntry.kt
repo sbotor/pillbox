@@ -9,7 +9,9 @@ import androidx.room.Relation
 data class ReminderHistoryEntryData(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val deliveredTimestamp: Long,
-    val description: String
+    val description: String,
+    val wasViewed: Boolean = false,
+    val isConfirmed: Boolean = false
 )
 
 @Entity(primaryKeys = ["entryId", "ordinal"])

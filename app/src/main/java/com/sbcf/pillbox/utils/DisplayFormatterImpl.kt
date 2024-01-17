@@ -17,7 +17,7 @@ class DisplayFormatterImpl @Inject constructor(private val context: Context) : D
         return "$fmtHour:$fmtMinute"
     }
 
-    override fun dateTime(cal: Calendar): String {
+    override fun dayOfTheWeekAndTime(cal: Calendar): String {
         val day = dayOfWeek(DayOfWeek.fromCalendar(cal))
         val hour = cal.get(Calendar.HOUR_OF_DAY)
         val minute = cal.get(Calendar.MINUTE)

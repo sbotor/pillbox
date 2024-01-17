@@ -33,4 +33,13 @@ abstract class ReminderHistoryDao {
     @Query("SELECT * FROM ReminderHistoryEntryData")
     @Transaction
     abstract suspend fun getAll(): List<ReminderHistoryEntry>
+
+    @Query("UPDATE ReminderHistoryEntryData SET wasViewed = 1 WHERE id = :id")
+    abstract suspend fun markAsViewed(id: Int)
+
+    @Query("UPDATE ReminderHistoryEntryData SET isConfirmed = :value WHERE id = :id")
+    abstract suspend fun markConfirmation(id: Int, value: Boolean)
+
+    @Query("SELECT * FROM ReminderHistoryEntryData WHERE id = :id")
+    abstract suspend fun get(id: Int): ReminderHistoryEntry?
 }

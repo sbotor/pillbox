@@ -40,8 +40,14 @@
             android:theme="@style/Theme.PillBox">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.sbcf.pillbox.REMINDER_NOTIFICATION" />
+                <data
+                    android:host="history"
+                    android:scheme="content" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>

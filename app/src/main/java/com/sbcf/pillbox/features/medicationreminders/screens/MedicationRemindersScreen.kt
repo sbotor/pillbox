@@ -93,7 +93,7 @@ private fun MedicationReminderList(
     val alignment = Alignment.CenterHorizontally
     val modifier = Modifier
         .scaffoldedContent(padding)
-        .padding(horizontal = Dimens.PaddingBig)
+        .padding(horizontal = Dimens.PaddingLarge)
 
     if (vm.reminders.isEmpty()) {
         Column(
@@ -106,7 +106,7 @@ private fun MedicationReminderList(
         LazyColumn(
             modifier = Modifier
                 .scaffoldedContent(padding)
-                .padding(horizontal = Dimens.PaddingBig),
+                .padding(horizontal = Dimens.PaddingLarge),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             items(vm.reminders) { x ->

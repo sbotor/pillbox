@@ -45,6 +45,10 @@
     <string name="home_page_nav">Strona główna</string>
     <string name="medication_nav">Leki</string>
 
+    <string name="reminder_history_long_name">Przypomnienie o zażyciu leków</string>
+    <string name="reminder_history_confirm">Oznacz leki jako zażyte</string>
+    <string name="reminder_history_medications">Lista leków do zażycia</string>
+
     <string-array name="days_of_week">
         <item>Poniedziałek</item>
         <item>Wtorek</item>

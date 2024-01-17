@@ -12,6 +12,6 @@ fun ListItemSpacer() {
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
-            .height(Dimens.PaddingBig)
+            .height(Dimens.PaddingLarge)
     )
 }
