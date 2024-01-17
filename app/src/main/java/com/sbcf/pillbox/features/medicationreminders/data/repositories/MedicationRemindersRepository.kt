@@ -6,11 +6,11 @@ import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOv
 interface MedicationRemindersRepository {
     suspend fun invalidateAllAndGetEnabled(): List<MedicationReminder>
     suspend fun updateMany(reminders: List<MedicationReminder>)
-    suspend fun get(id: Long): MedicationReminder?
+    suspend fun get(id: Int): MedicationReminder?
     suspend fun update(reminder: MedicationReminder)
     suspend fun getAll(): List<MedicationReminderOverview>
-    suspend fun changeDeliveryTimestamp(id: Long, value: Long?)
-    suspend fun add(reminder: MedicationReminder): Long
-    suspend fun deleteById(id: Long)
+    suspend fun changeDeliveryTimestamp(id: Int, value: Long?)
+    suspend fun add(reminder: MedicationReminder): Int
+    suspend fun deleteById(id: Int)
 }
 

@@ -74,32 +74,33 @@ class MedicationRemindersViewModel @Inject constructor(
         reminders = repo.getAll()
     }
 
-    fun removeReminder(id: Long) {
+    fun removeReminder(id: Int) {
         viewModelScope.launch {
+            val reminder = repo.get(id)!!
+            scheduler.unschedule(reminder)
             repo.deleteById(id)
+
             fetchReminders()
         }
     }
 
     fun toggleReminder(reminder: MedicationReminderOverview) {
-        if (reminder.nextDeliveryTimestamp != null) {
-            // TODO: It would probably be good to unschedule the alarm
-            viewModelScope.launch {
-                repo.changeDeliveryTimestamp(reminder.id, null)
-                fetchReminders()
-            }
-            return
+        val nextDeliveryTimestamp = if (reminder.nextDeliveryTimestamp == null) {
+            calculator.getEarliestTimestamp(TimestampInfo(reminder))
+        } else {
+            null
         }
 
-        val tsInfo = TimestampInfo(reminder)
-        val timestamp = calculator.getEarliestTimestamp(tsInfo) ?: return
-
         viewModelScope.launch {
-            repo.changeDeliveryTimestamp(reminder.id, timestamp)
-            val rem = repo.get(reminder.id)
-            if (rem != null) {
-                scheduler.schedule(rem)
+            repo.changeDeliveryTimestamp(reminder.id, nextDeliveryTimestamp)
+            val updatedReminder = repo.get(reminder.id)!!
+
+            if (updatedReminder.nextDeliveryTimestamp == null) {
+                scheduler.unschedule(updatedReminder)
+            } else {
+                scheduler.schedule(updatedReminder)
             }
+
             fetchReminders()
         }
     }

@@ -18,14 +18,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sbcf.pillbox.R
-import com.sbcf.pillbox.features.medications.models.Dosage
+import com.sbcf.pillbox.features.medications.models.DosageState
 import com.sbcf.pillbox.features.medications.models.DosageTimeInterval
 import com.sbcf.pillbox.features.medications.models.DosageUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DosageInput(
-    dosage: Dosage,
+    state: DosageState,
     isEditable: Boolean
 ) {
     var dropdownsEnabled by remember { mutableStateOf(false) }
@@ -36,14 +36,14 @@ fun DosageInput(
 
     Row {
         NumberField(
-            state = dosage.amount,
+            state = state.amount,
             isEditable = isEditable,
             labelId = R.string.amount,
             maxLength = 2,
             modifier = Modifier
                 .width(100.dp)
                 .padding(2.dp),
-            onValChange = { dosage.amount = it }
+            onValChange = { state.amount = it }
         )
         ExposedDropdownMenuBox(
             expanded = unitIsExpanded,
@@ -57,7 +57,7 @@ fun DosageInput(
         ) {
             OutlinedTextField(
                 enabled = dropdownsEnabled,
-                value = dosage.unit.abbreviation,
+                value = state.unit.abbreviation,
                 readOnly = true,
                 onValueChange = {},
                 trailingIcon = {
@@ -74,7 +74,7 @@ fun DosageInput(
                     DropdownMenuItem(
                         text = { Text(text = value.abbreviation) },
                         onClick = {
-                            dosage.unit = value
+                            state.unit = value
                             unitIsExpanded = false
                         }
                     )
@@ -87,14 +87,14 @@ fun DosageInput(
     }
     Row {
         NumberField(
-            state = dosage.interval,
+            state = state.interval,
             isEditable = isEditable,
             labelId = R.string.amount,
             maxLength = 3,
             modifier = Modifier
                 .width(100.dp)
                 .padding(2.dp),
-            onValChange = { dosage.interval = it }
+            onValChange = { state.interval = it }
         )
 
         ExposedDropdownMenuBox(
@@ -109,7 +109,7 @@ fun DosageInput(
         ) {
             OutlinedTextField(
                 enabled = dropdownsEnabled,
-                value = dosage.intervalType.getName(dosage.interval),
+                value = state.intervalType.getName(state.interval),
                 onValueChange = {},
                 readOnly = true,
                 trailingIcon = {
@@ -124,9 +124,9 @@ fun DosageInput(
             ) {
                 for (value in DosageTimeInterval.entries) {
                     DropdownMenuItem(
-                        text = { Text(text = value.getName(dosage.interval)) },
+                        text = { Text(text = value.getName(state.interval)) },
                         onClick = {
-                            dosage.intervalType = value
+                            state.intervalType = value
                             intervalIsExpanded = false
                         }
                     )
