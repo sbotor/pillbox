@@ -67,7 +67,7 @@ fun EditMedicationReminderScreen(
                 ),
         ) {
             Column(
-                modifier = Modifier.padding(Dimens.PaddingBig),
+                modifier = Modifier.padding(Dimens.PaddingLarge),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 TimePicker(state = timePickerState)

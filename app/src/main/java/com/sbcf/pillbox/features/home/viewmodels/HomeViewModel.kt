@@ -25,7 +25,6 @@ class HomeViewModel
         reminder = reminderRepo.getNext()
     }
 
-    //TODO: unify this together with the function in MedicationReminderViewModel
     fun formatNextNotificationTime(timestamp: Long?): String {
         if (timestamp == null) {
             return ""
@@ -33,6 +32,6 @@ class HomeViewModel
 
         val cal = clock.fromTimestamp(timestamp)
 
-        return formatter.dateTime(cal)
+        return formatter.dayOfWeekAndDateTime(cal)
     }
 }

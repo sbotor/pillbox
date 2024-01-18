@@ -11,6 +11,7 @@ import com.sbcf.pillbox.features.medicationreminders.services.MedicationReminder
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationReminderPublisherImpl
 import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculator
 import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculatorImpl
+import com.sbcf.pillbox.features.reminderhistory.data.repositories.ReminderHistoryRepository
 import com.sbcf.pillbox.utils.Clock
 import dagger.Module
 import dagger.Provides
@@ -45,9 +46,10 @@ class MedicationRemindersModule {
         @ApplicationContext context: Context,
         clock: Clock,
         scheduler: MedicationAlarmScheduler,
-        calculator: ReminderTimestampCalculator
+        calculator: ReminderTimestampCalculator,
+        historyRepo: ReminderHistoryRepository
     ): MedicationReminderPublisher =
-        MedicationReminderPublisherImpl(context, clock, scheduler, calculator)
+        MedicationReminderPublisherImpl(context, clock, scheduler, calculator, historyRepo)
 
     @Provides
     @Singleton

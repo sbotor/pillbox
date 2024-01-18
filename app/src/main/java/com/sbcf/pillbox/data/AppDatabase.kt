@@ -7,8 +7,14 @@ import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
 import com.sbcf.pillbox.features.medications.data.Medication
 import com.sbcf.pillbox.features.medications.data.repositories.MedicationDao
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationReminderDao
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryEntryData
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryItem
+import com.sbcf.pillbox.features.reminderhistory.data.repositories.ReminderHistoryDao
 
-@Database(entities = [Medication::class, MedicationReminder::class], version = AppDatabase.VERSION)
+@Database(
+    entities = [Medication::class, MedicationReminder::class, ReminderHistoryEntryData::class, ReminderHistoryItem::class],
+    version = AppDatabase.VERSION
+)
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {
     companion object {
@@ -18,4 +24,5 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun medicationDao(): MedicationDao
     abstract fun medicationReminderDao(): MedicationReminderDao
+    abstract fun medicationReminderHistoryDao(): ReminderHistoryDao
 }

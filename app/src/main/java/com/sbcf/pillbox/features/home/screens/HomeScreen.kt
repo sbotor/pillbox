@@ -2,7 +2,7 @@ package com.sbcf.pillbox.features.home.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -40,35 +40,36 @@ fun HomeScreen(
         )
     })
     { padding ->
-        Column(modifier = Modifier
-            .scaffoldedContent(padding)
-            .padding(horizontal = Dimens.PaddingBig)
+        Column(
+            modifier = Modifier
+                .scaffoldedContent(padding)
+                .padding(horizontal = Dimens.PaddingLarge)
         ) {
-            Row(modifier = Modifier.fillMaxHeight(0.3F))
-            {
+            Row {
                 Column {
                     Text(
                         text = stringResource(id = R.string.next_reminder),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.headlineMedium
                     )
                     NextMedicationReminderItem(
                         reminder = vm.reminder,
                         onClick = onNextReminderClick,
                         modifier = Modifier
-                            .fillMaxHeight()
-                            .padding(top = Dimens.PaddingBig),
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = Dimens.PaddingNormal,
+                                vertical = Dimens.PaddingLarge
+                            ),
                         datetimeFormatter = { vm.formatNextNotificationTime(it) }
                     )
                 }
             }
-
-
             Row(modifier = Modifier.padding(top = 20.dp))
             {
                 Column {
                     Text(
                         text = stringResource(id = R.string.missed_reminders),
-                        style = MaterialTheme.typography.titleLarge
+                        style = MaterialTheme.typography.headlineMedium
                     )
                     Text(text = "Todo")
                 }

@@ -33,9 +33,10 @@ fun NextMedicationReminderItem(
     ) {
         if (reminder == null) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .padding(Dimens.PaddingNormal),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 Text(
                     stringResource(id = R.string.no_set_reminders),
@@ -57,18 +58,22 @@ fun NextMedicationReminderItem(
             if (reminder.title.isNotEmpty()) {
                 Text(
                     text = reminder.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.padding(start = Dimens.PaddingNormal)
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(
+                        start = Dimens.PaddingNormal,
+                        end = Dimens.PaddingNormal,
+                        bottom = Dimens.PaddingNormal
+                    )
                 )
             }
 
-            Row()
-            {
+            Row {
                 Text(
                     text = "TODO: Tutaj mała lista leków.",
                     modifier = Modifier.padding(
                         start = Dimens.PaddingNormal,
-                        top = Dimens.PaddingSmall
+                        end = Dimens.PaddingNormal,
+                        bottom = Dimens.PaddingNormal
                     )
                 )
             }
