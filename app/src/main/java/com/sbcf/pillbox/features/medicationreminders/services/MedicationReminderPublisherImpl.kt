@@ -38,7 +38,15 @@ class MedicationReminderPublisherImpl @Inject constructor(
 
         val nowTimestamp = clock.now().timeInMillis
 
-        val meds = reminder.medications.map { ReminderHistoryItem(0, 0, it.name) }
+        val meds = reminder.medications.map {
+            ReminderHistoryItem(
+                0,
+                0,
+                it.name,
+                it.dosageAmount,
+                it.dosageUnit
+            )
+        }
         val historyEntry = ReminderHistoryEntry(
             ReminderHistoryEntryData(0, nowTimestamp, rem.title),
             meds

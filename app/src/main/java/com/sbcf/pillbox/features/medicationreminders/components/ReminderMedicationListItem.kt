@@ -20,6 +20,7 @@ import com.sbcf.pillbox.utils.Dimens
 @Composable
 fun ReminderMedicationListItem(
     name: String,
+    dosage: String? = null,
     actions: @Composable (() -> Unit)? = null
 ) {
     Card(
@@ -36,7 +37,28 @@ fun ReminderMedicationListItem(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = name, modifier = Modifier.padding(Dimens.PaddingNormal))
+            val hasDosage = !dosage.isNullOrEmpty()
+            Text(
+                text = name,
+                modifier = Modifier.padding(
+                    start = Dimens.PaddingNormal,
+                    top = Dimens.PaddingNormal,
+                    bottom = Dimens.PaddingNormal,
+                    end = if (hasDosage) Dimens.PaddingSmall else Dimens.PaddingNormal
+                ),
+                style = MaterialTheme.typography.titleMedium
+            )
+            if (hasDosage) {
+                Text(
+                    text = dosage!!,
+                    modifier = Modifier.padding(
+                        start = Dimens.PaddingSmall,
+                        top = Dimens.PaddingNormal,
+                        bottom = Dimens.PaddingNormal,
+                        end = Dimens.PaddingNormal
+                    )
+                )
+            }
             if (actions != null) {
                 Box(modifier = Modifier.padding(Dimens.PaddingNormal)) {
                     actions()

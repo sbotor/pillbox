@@ -4,11 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,10 +39,13 @@ fun ReminderMedicationsList(
                 Text(text = stringResource(id = R.string.add))
             }
         }
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(meds) {
-                ReminderMedicationListItem(name = it.name) {
-                    TextButton(onClick = { onRemoveItemClick(it) }) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            for (med in meds) {
+                ReminderMedicationListItem(
+                    name = med.name,
+                    dosage = "${med.dosageAmount} ${med.dosageUnit}"
+                ) {
+                    TextButton(onClick = { onRemoveItemClick(med) }) {
                         Icon(
                             imageVector = Icons.Filled.Delete,
                             contentDescription = stringResource(id = R.string.delete)

@@ -51,10 +51,10 @@ class MedicationFormViewModel @Inject constructor(
             medicationId,
             name = state.name.value,
             description = state.description.value,
-            unit = state.dosage.unit,
-            amount = state.dosage.amount,
-            interval = state.dosage.interval,
-            intervalType = state.dosage.intervalType
+            dosageUnit = state.dosage.unit,
+            dosageAmount = state.dosage.amount,
+            dosageInterval = state.dosage.interval,
+            dosageIntervalType = state.dosage.intervalType
         )
 
         viewModelScope.launch {

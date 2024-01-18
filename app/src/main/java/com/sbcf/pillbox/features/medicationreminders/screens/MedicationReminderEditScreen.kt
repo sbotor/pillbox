@@ -1,7 +1,7 @@
 package com.sbcf.pillbox.features.medicationreminders.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
@@ -78,22 +78,26 @@ fun EditMedicationReminderScreen(
                 }
             })
     }) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .scaffoldedContent(padding)
                 .padding(horizontal = Dimens.PaddingNormal),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MedicationReminderMainForm(
-                state = vm.state,
-                onTimeButtonClick = { vm.state.time.showTimePicker = true },
-                time = vm.state.time.toString(),
-                dayOfWeekFormatter = { vm.formatDayOfWeek(it) }
-            )
-            ReminderMedicationsList(
-                meds = vm.state.medications,
-                onAddItemClick = { vm.state.medPicker.show() },
-                onRemoveItemClick = { vm.removeMed(it.id) })
+            item {
+                MedicationReminderMainForm(
+                    state = vm.state,
+                    onTimeButtonClick = { vm.state.time.showTimePicker = true },
+                    time = vm.state.time.toString(),
+                    dayOfWeekFormatter = { vm.formatDayOfWeek(it) }
+                )
+            }
+            item {
+                ReminderMedicationsList(
+                    meds = vm.state.medications,
+                    onAddItemClick = { vm.state.medPicker.show() },
+                    onRemoveItemClick = { vm.removeMed(it.id) })
+            }
         }
     }
 }

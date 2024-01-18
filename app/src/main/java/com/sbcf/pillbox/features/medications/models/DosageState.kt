@@ -61,7 +61,10 @@ enum class DosageTimeInterval(
     fun getName(interval: Int): String {
         return if (interval == 1)
             this.singular
-        else if ((interval % 100 !in 5..21) && interval % 10 < 5 && interval % 10 != 0 && interval % 10 != 1)
+        else if ((interval % 100 !in 5..21)
+            && interval % 10 < 5
+            && interval % 10 != 0
+            && interval % 10 != 1)
             this.plural1
         else
             this.plural2

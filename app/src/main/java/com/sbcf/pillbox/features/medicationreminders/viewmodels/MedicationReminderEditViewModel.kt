@@ -91,7 +91,7 @@ class MedicationReminderEditViewModel @Inject constructor(
     }
 
     fun addMed(med: MedicationOverview) {
-        val mapped = ReminderMedicationItem(med.id, med.name)
+        val mapped = ReminderMedicationItem(med.id, med.name, med.dosageAmount, med.dosageUnit)
         val existingIdx = state.medications.indexOfFirst { it.id == med.id }
         if (existingIdx >= 0) {
             state.medications[existingIdx] = mapped

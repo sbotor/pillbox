@@ -8,7 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.sbcf.pillbox.features.reminderhistory.views.ReminderHistoryEntryScreen
+import com.sbcf.pillbox.features.reminderhistory.screens.ReminderHistoryEntryScreen
 import com.sbcf.pillbox.screens.Screen
 
 class ReminderHistoryScreens {
