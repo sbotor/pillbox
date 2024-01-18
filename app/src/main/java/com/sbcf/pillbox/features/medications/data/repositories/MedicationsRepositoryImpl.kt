@@ -7,6 +7,8 @@ import javax.inject.Inject
 class MedicationsRepositoryImpl @Inject constructor(private val dao: MedicationDao) :
     MedicationsRepository {
     override suspend fun getAllMedications(): List<MedicationOverview> = dao.getAll()
+    override suspend fun getAllMedicationsExcept(ids: List<Int>): List<MedicationOverview> =
+        dao.getAllExcept(ids)
 
     override suspend fun createMedication(medication: Medication) {
         dao.insert(medication)

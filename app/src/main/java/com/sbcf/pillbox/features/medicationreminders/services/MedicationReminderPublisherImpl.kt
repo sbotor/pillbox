@@ -10,7 +10,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.sbcf.pillbox.MainActivity
 import com.sbcf.pillbox.R
-import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderWithMedications
 import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.features.reminderhistory.ReminderHistoryScreens
 import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryEntry
@@ -28,18 +28,20 @@ class MedicationReminderPublisherImpl @Inject constructor(
     private val historyRepo: ReminderHistoryRepository
 ) :
     MedicationReminderPublisher {
-    override suspend fun publishAndCalculateNextTimestamp(reminder: MedicationReminder) {
+    override suspend fun publishAndCalculateNextTimestamp(reminder: ReminderWithMedications) {
         val notificationManager = getManager()
         if (!notificationManager.areNotificationsEnabled()) {
             return
         }
 
+        val rem = reminder.reminder
+
         val nowTimestamp = clock.now().timeInMillis
 
+        val meds = reminder.medications.map { ReminderHistoryItem(0, 0, it.name) }
         val historyEntry = ReminderHistoryEntry(
-            ReminderHistoryEntryData(0, nowTimestamp, reminder.title), listOf(
-                ReminderHistoryItem(0, 0, "test")
-            )
+            ReminderHistoryEntryData(0, nowTimestamp, rem.title),
+            meds
         )
 
         val entryId = historyRepo.create(historyEntry)
@@ -48,31 +50,31 @@ class MedicationReminderPublisherImpl @Inject constructor(
         val androidNotification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.medication_24)
             .setContentTitle(context.getString(R.string.medication_notification_title))
-            .setContentText(reminder.title)
+            .setContentText(rem.title)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(intent)
             .setAutoCancel(true)
             .build()
 
-        notificationManager.notify(reminder.id, androidNotification)
+        notificationManager.notify(rem.id, androidNotification)
 
-        reminder.lastDeliveryTimestamp = nowTimestamp
+        rem.lastDeliveryTimestamp = nowTimestamp
 
-        val tsInfo = TimestampInfo(reminder)
+        val tsInfo = TimestampInfo(rem)
         val nextTimestamp = calculator.getEarliestRepeatingTimestamp(tsInfo)
 
         if (nextTimestamp == null) {
-            reminder.disable()
+            rem.disable()
             return
         }
 
-        reminder.enable(nextTimestamp)
+        rem.enable(nextTimestamp)
 
         try {
-            scheduler.schedule(reminder)
+            scheduler.schedule(rem)
         } catch (e: Exception) {
             // TODO: We should probably do something
-            reminder.disable()
+            rem.disable()
         }
     }
 

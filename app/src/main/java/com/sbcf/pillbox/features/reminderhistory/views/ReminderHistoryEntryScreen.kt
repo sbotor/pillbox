@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.ListItemSpacer
+import com.sbcf.pillbox.features.medicationreminders.components.ReminderMedicationListItem
 import com.sbcf.pillbox.features.reminderhistory.viewmodels.ReminderHistoryEntryViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
@@ -109,18 +110,7 @@ fun ReminderHistoryEntryScreen(
                 )
                 LazyColumn {
                     items(vm.items) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(Dimens.PaddingNormal),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surface,
-                            ),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        ) {
-                            Text(text = it, modifier = Modifier.padding(Dimens.PaddingLarge))
-                        }
-                        ListItemSpacer()
+                        ReminderMedicationListItem(name = it)
                     }
                 }
             }

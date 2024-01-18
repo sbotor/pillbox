@@ -12,6 +12,9 @@ interface MedicationDao {
     @Query("SELECT id, name, amount, unit, interval, intervalType FROM Medication ORDER BY name")
     suspend fun getAll(): List<MedicationOverview>
 
+    @Query("SELECT id, name, amount, unit, interval, intervalType FROM Medication WHERE id NOT IN (:ids) ORDER BY name")
+    suspend fun getAllExcept(ids: List<Int>): List<MedicationOverview>
+
     @Insert
     suspend fun insert(medication: Medication)
 

@@ -1,18 +1,20 @@
 package com.sbcf.pillbox.features.medicationreminders.viewmodels
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sbcf.pillbox.features.medicationreminders.data.DayOfWeek
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderWithMedications
 import com.sbcf.pillbox.features.medicationreminders.data.repositories.MedicationRemindersRepository
+import com.sbcf.pillbox.features.medicationreminders.models.MedicationPickerDialogState
+import com.sbcf.pillbox.features.medicationreminders.models.ReminderMedicationItem
+import com.sbcf.pillbox.features.medicationreminders.models.ReminderTimeState
 import com.sbcf.pillbox.features.medicationreminders.models.TimestampInfo
 import com.sbcf.pillbox.features.medicationreminders.services.MedicationAlarmScheduler
 import com.sbcf.pillbox.features.medicationreminders.services.ReminderTimestampCalculator
+import com.sbcf.pillbox.features.medications.data.repositories.MedicationsRepository
+import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.utils.Clock
 import com.sbcf.pillbox.utils.DisplayFormatter
 import com.sbcf.pillbox.utils.validation.InputState
@@ -27,16 +29,16 @@ class MedicationReminderEditViewModel @Inject constructor(
     private val scheduler: MedicationAlarmScheduler,
     private val clock: Clock,
     private val calculator: ReminderTimestampCalculator,
-    private val formatter: DisplayFormatter
+    private val formatter: DisplayFormatter,
+    private val medRepo: MedicationsRepository
 ) :
     ViewModel() {
-    class State {
+    class State(formatter: DisplayFormatter) {
         val days = mutableStateListOf(false, false, false, false, false, false, false)
-        var hour by mutableIntStateOf(0)
-            private set
-        var minute by mutableIntStateOf(0)
-            private set
+        val time = ReminderTimeState(formatter)
         val title = InputState()
+        val medications = mutableStateListOf<ReminderMedicationItem>()
+        val medPicker = MedicationPickerDialogState()
 
         fun toggleDay(idx: Int): Boolean {
             if (idx >= 7) {
@@ -47,32 +49,34 @@ class MedicationReminderEditViewModel @Inject constructor(
             return days[idx]
         }
 
-        fun setTime(hour: Int, minute: Int) {
-            this.hour = hour
-            this.minute = minute
-        }
-
-        fun reset(reminder: MedicationReminder?, now: Calendar) {
+        fun reset(reminder: ReminderWithMedications?, now: Calendar) {
             if (reminder == null) {
-                days.replaceAll { false }
-                hour = now.get(Calendar.HOUR_OF_DAY)
-                minute = now.get(Calendar.MINUTE)
+                time.hour = now.get(Calendar.HOUR_OF_DAY)
+                time.minute = now.get(Calendar.MINUTE)
                 title.reset("")
+
+                days.replaceAll { false }
+
+                medications.clear()
             } else {
+                val rem = reminder.reminder
+                time.hour = rem.hour
+                time.minute = rem.minute
+                title.reset(rem.title)
+
                 var i = 0
-                days.replaceAll { reminder.days.isSet(i++) }
-                hour = reminder.hour
-                minute = reminder.minute
-                title.reset(reminder.title)
+                days.replaceAll { rem.days.isSet(i++) }
+
+                medications.clear()
+                medications.addAll(reminder.medications)
             }
         }
     }
 
-    private var reminder = MedicationReminder()
+    private var remWithMeds = ReminderWithMedications(MedicationReminder(), emptyList())
     private var isCreated = false
 
-    val state = State()
-    var showTimePicker by mutableStateOf(false)
+    val state = State(formatter)
 
     suspend fun fetchReminder(id: Int?) {
         if (id == null) {
@@ -80,16 +84,32 @@ class MedicationReminderEditViewModel @Inject constructor(
             return
         }
 
-        val rem = repo.get(id)!!
-        reminder = rem
+        val rem = repo.getReminderWithMedications(id)!!
+        remWithMeds = rem
         state.reset(rem, clock.now())
         isCreated = true
     }
 
+    fun addMed(med: MedicationOverview) {
+        val mapped = ReminderMedicationItem(med.id, med.name)
+        val existingIdx = state.medications.indexOfFirst { it.id == med.id }
+        if (existingIdx >= 0) {
+            state.medications[existingIdx] = mapped
+        } else {
+            state.medications.add(mapped)
+        }
+    }
+
+    fun removeMed(medicationId: Int) {
+        state.medications.removeIf { it.id == medicationId }
+    }
+
     fun save() {
-        val rem = reminder
-        rem.hour = state.hour
-        rem.minute = state.minute
+        val rem = remWithMeds.reminder
+        val meds = state.medications.toList()
+
+        rem.hour = state.time.hour
+        rem.minute = state.time.minute
         rem.title = state.title.value
 
         for ((i, day) in state.days.withIndex()) {
@@ -106,17 +126,24 @@ class MedicationReminderEditViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
+            val newRem = ReminderWithMedications(rem, meds)
+
             if (isCreated) {
-                repo.update(rem)
+                repo.updateReminderWithMedications(newRem)
             } else {
-                rem.id = repo.add(rem)
+                rem.id = repo.addReminderWithMedications(newRem)
             }
+
             isCreated = true
+            remWithMeds = newRem
             scheduler.schedule(rem)
         }
     }
 
-    fun formatTime() = formatter.time(state.hour, state.minute)
-
     fun formatDayOfWeek(day: DayOfWeek) = formatter.dayOfWeek(day)
+
+    suspend fun fetchMedications() {
+        val ids = state.medications.map { it.id }
+        state.medPicker.medications = medRepo.getAllMedicationsExcept(ids)
+    }
 }
