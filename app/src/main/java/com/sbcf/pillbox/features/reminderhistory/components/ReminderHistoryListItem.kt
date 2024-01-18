@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.ListItemSpacer
 import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryEntry
 import com.sbcf.pillbox.utils.Dimens
@@ -52,7 +54,7 @@ fun ReminderHistoryListItem(
             }
             if (!reminder.data.isConfirmed) {
                 Text(
-                    text = "Niezażyte", //TODO
+                    text = stringResource(id = R.string.not_taken_medicine),
                     modifier = Modifier
                         .padding(Dimens.PaddingNormal)
                         .align(Alignment.End),

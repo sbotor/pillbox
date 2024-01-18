@@ -54,6 +54,10 @@
     <string name="reminder_history_confirm">Oznacz leki jako zażyte</string>
     <string name="reminder_history_medications">Lista leków do zażycia</string>
 
+    <string name="history_page_title">Historia</string>
+    <string name="history_nav_button">Historia</string>
+    <string name="not_taken_medicine">Niezażyte</string>
+
     <string-array name="days_of_week">
         <item>Poniedziałek</item>
         <item>Wtorek</item>

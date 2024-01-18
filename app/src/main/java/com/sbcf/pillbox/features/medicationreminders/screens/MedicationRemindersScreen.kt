@@ -113,7 +113,7 @@ private fun MedicationReminderList(
                     .fillMaxWidth()
                     .height(50.dp),
             ) {
-                Text(text = "Historia", fontSize = 25.sp) //TODO
+                Text(text = stringResource(id = R.string.history_nav_button), fontSize = 25.sp)
             }
         }
 

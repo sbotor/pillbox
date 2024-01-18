@@ -33,7 +33,7 @@ fun ReminderHistoryListScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Historia") }, //TODO: localize
+                title = { Text(text = stringResource(id = R.string.history_page_title)) },
             )
         }
     ) { padding ->
