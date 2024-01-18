@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import com.sbcf.pillbox.features.reminderhistory.screens.ReminderHistoryEntryScreen
+import com.sbcf.pillbox.features.reminderhistory.screens.ReminderHistoryListScreen
 import com.sbcf.pillbox.screens.Screen
 
 class ReminderHistoryScreens {
@@ -26,6 +27,9 @@ class ReminderHistoryScreens {
         fun createDeepLinkPattern(entryId: Int): Uri = Uri.parse("content://history/$entryId")
         fun getEntryId(bundle: Bundle) = bundle.getInt(arguments[0].name)
     }
+
+    data object ReminderHistoryList : Screen("medicationReminders/history")
+
 }
 
 fun NavGraphBuilder.reminderHistory(navController: NavController) {
@@ -36,5 +40,14 @@ fun NavGraphBuilder.reminderHistory(navController: NavController) {
     ) {
         val entryId = ReminderHistoryScreens.ReminderHistoryEntry.getEntryId(it.arguments!!)
         ReminderHistoryEntryScreen(entryId = entryId, onBackClick = { navController.navigateUp() })
+    }
+
+    composable(ReminderHistoryScreens.ReminderHistoryList.route)
+    {
+        ReminderHistoryListScreen(
+            onItemClick = {
+                navController.navigate(ReminderHistoryScreens.ReminderHistoryEntry.createRoute(it))
+            }
+        )
     }
 }

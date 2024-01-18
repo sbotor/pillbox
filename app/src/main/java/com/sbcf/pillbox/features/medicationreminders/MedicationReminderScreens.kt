@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.sbcf.pillbox.features.medicationreminders.screens.EditMedicationReminderScreen
 import com.sbcf.pillbox.features.medicationreminders.screens.MedicationRemindersScreen
+import com.sbcf.pillbox.features.reminderhistory.ReminderHistoryScreens
 import com.sbcf.pillbox.screens.Screen
 
 sealed class MedicationReminderScreens {
@@ -32,7 +33,11 @@ fun NavGraphBuilder.medicationReminders(navController: NavController) {
                         it.id
                     )
                 )
-            })
+            },
+            onHistoryClick = {
+                navController.navigate(ReminderHistoryScreens.ReminderHistoryList.route)
+            }
+        )
     }
 
     composable(MedicationReminderScreens.AddMedicationReminder.route) {
