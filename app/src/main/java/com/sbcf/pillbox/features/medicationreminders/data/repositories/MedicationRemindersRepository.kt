@@ -1,6 +1,8 @@
 package com.sbcf.pillbox.features.medicationreminders.data.repositories
 
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderMedication
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderWithMedications
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 
 interface MedicationRemindersRepository {
@@ -13,5 +15,8 @@ interface MedicationRemindersRepository {
     suspend fun changeDeliveryTimestamp(id: Int, value: Long?)
     suspend fun add(reminder: MedicationReminder): Int
     suspend fun deleteById(id: Int)
+    suspend fun getReminderWithMedications(id: Int): ReminderWithMedications?
+    suspend fun updateReminderWithMedications(rem: ReminderWithMedications)
+    suspend fun addReminderWithMedications(rem: ReminderWithMedications): Int
 }
 

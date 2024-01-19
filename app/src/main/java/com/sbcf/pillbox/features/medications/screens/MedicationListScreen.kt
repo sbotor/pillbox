@@ -1,10 +1,7 @@
 package com.sbcf.pillbox.features.medications.screens
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Search
@@ -16,13 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.SearchField
-import com.sbcf.pillbox.features.medications.components.MedicationListItem
+import com.sbcf.pillbox.features.medications.components.MedicationList
 import com.sbcf.pillbox.features.medications.components.MedicationListItemCallbacks
 import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.features.medications.viewmodels.MedicationListViewModel
@@ -82,31 +78,18 @@ fun MedicationListScreen(
             }
         })
     }) { padding ->
-        val alignment = Alignment.CenterHorizontally
         val modifier = Modifier
             .scaffoldedContent(padding)
             .padding(horizontal = Dimens.PaddingLarge)
 
-        if (vm.medications.isEmpty()) {
-            Column(
-                horizontalAlignment = alignment,
-                modifier = modifier
-            ) {
-                Text(text = stringResource(id = R.string.medication_list_empty))
-            }
-        } else {
-            LazyColumn(
-                horizontalAlignment = alignment,
-                modifier = modifier
-            ) {
-                items(vm.medications) { med ->
-                    val itemCallbacks = MedicationListItemCallbacks(
-                        onOpen = { callbacks.onItemOpenClick(it) },
-                        onEdit = { callbacks.onItemEditClick(it) },
-                        onRemoval = { x -> vm.removeMedication(x.id) })
-                    MedicationListItem(medication = med, callbacks = itemCallbacks)
-                }
-            }
-        }
+        MedicationList(
+            medications = vm.medications,
+            modifier = modifier,
+            itemCallbacksFactory = {
+                MedicationListItemCallbacks(
+                    onOpen = { callbacks.onItemOpenClick(it) },
+                    onEdit = { callbacks.onItemEditClick(it) },
+                    onRemoval = { x -> vm.removeMedication(x.id) })
+            })
     }
 }

@@ -4,6 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
+import com.sbcf.pillbox.features.medications.models.DosageUnit
 
 @Entity
 data class ReminderHistoryEntryData(
@@ -18,7 +19,9 @@ data class ReminderHistoryEntryData(
 data class ReminderHistoryItem(
     var ordinal: Int,
     var entryId: Int,
-    val description: String
+    val description: String,
+    var dosageAmount: Int,
+    var dosageUnit: DosageUnit,
 )
 
 data class ReminderHistoryEntry(

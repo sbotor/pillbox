@@ -9,6 +9,7 @@
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="delete">Usuń</string>
+    <string name="add">Dodaj</string>
 
     <string name="validation_required">Pole wymagane</string>
     <string name="validation_min_length">Minimalna liczba znaków to</string>
@@ -38,6 +39,7 @@
     <string name="medication_reminder">Przypomnienie</string>
     <string name="medication_reminder_title">Tytuł</string>
     <string name="medication_reminder_list_empty">Brak przypomnień</string>
+    <string name="medication_reminder_medications">Powiązane leki</string>
 
     <string name="home_page_title">Strona główna</string>
     <string name="next_reminder">Następne przypomnienie</string>

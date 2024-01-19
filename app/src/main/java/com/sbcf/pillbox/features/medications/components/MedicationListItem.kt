@@ -1,6 +1,7 @@
 package com.sbcf.pillbox.features.medications.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -29,9 +30,9 @@ import com.sbcf.pillbox.features.medications.models.MedicationOverview
 import com.sbcf.pillbox.utils.Dimens
 
 data class MedicationListItemCallbacks(
-    val onOpen: (MedicationOverview) -> Unit,
-    val onEdit: (MedicationOverview) -> Unit,
-    val onRemoval: (MedicationOverview) -> Unit
+    val onOpen: (MedicationOverview) -> Unit = {},
+    val onEdit: (MedicationOverview) -> Unit = {},
+    val onRemoval: (MedicationOverview) -> Unit = {}
 )
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -39,11 +40,12 @@ data class MedicationListItemCallbacks(
 fun MedicationListItem(
     medication: MedicationOverview,
     callbacks: MedicationListItemCallbacks,
+    disableMenu: Boolean = false
 ) {
     var menuExpanded by remember { mutableStateOf(false) }
     var showRemovalDialog by remember { mutableStateOf(false) }
 
-    if (showRemovalDialog) {
+    if (!disableMenu && showRemovalDialog) {
         MedicationRemovalDialog(
             onConfirmation = {
                 callbacks.onRemoval(medication)
@@ -56,14 +58,19 @@ fun MedicationListItem(
         )
     }
 
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = { callbacks.onOpen(medication) },
-                onLongClick = { menuExpanded = true }
-            )
-    ) {
+    var modifier = Modifier
+        .fillMaxWidth()
+
+    modifier = if (disableMenu) {
+        modifier.clickable { callbacks.onOpen(medication) }
+    } else {
+        modifier.combinedClickable(
+            onClick = { callbacks.onOpen(medication) },
+            onLongClick = { menuExpanded = true }
+        )
+    }
+
+    Card(modifier = modifier) {
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
@@ -81,24 +88,26 @@ fun MedicationListItem(
                 Text(text = medication.getDosageString())
             }
         }
-        DropdownMenu(
-            expanded = menuExpanded,
-            onDismissRequest = { menuExpanded = false }
-        ) {
-            DropdownMenuItem(
-                text = { Text(stringResource(id = R.string.edit)) },
-                onClick = {
-                    callbacks.onEdit(medication)
-                    menuExpanded = false
-                }
-            )
-            DropdownMenuItem(
-                text = { Text(stringResource(id = R.string.delete)) },
-                onClick = {
-                    showRemovalDialog = true
-                    menuExpanded = false
-                }
-            )
+        if (!disableMenu) {
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = { menuExpanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(id = R.string.edit)) },
+                    onClick = {
+                        callbacks.onEdit(medication)
+                        menuExpanded = false
+                    }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(id = R.string.delete)) },
+                    onClick = {
+                        showRemovalDialog = true
+                        menuExpanded = false
+                    }
+                )
+            }
         }
     }
     ListItemSpacer()

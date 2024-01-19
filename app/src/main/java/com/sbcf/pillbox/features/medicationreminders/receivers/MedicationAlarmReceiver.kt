@@ -24,14 +24,14 @@ class MedicationAlarmReceiver : BroadcastReceiver() {
         }
 
         launchGlobalAsync {
-            val notificationId = parseNotificationId(intent) ?: return@launchGlobalAsync
-            val notification = repo.get(notificationId) ?: return@launchGlobalAsync
-            if (!notification.isEnabled) {
+            val reminderId = parseNotificationId(intent) ?: return@launchGlobalAsync
+            val rem = repo.getReminderWithMedications(reminderId) ?: return@launchGlobalAsync
+            if (!rem.reminder.isEnabled) {
                 return@launchGlobalAsync
             }
 
-            publisher.publishAndCalculateNextTimestamp(notification)
-            repo.update(notification)
+            publisher.publishAndCalculateNextTimestamp(rem)
+            repo.updateReminderWithMedications(rem)
         }
     }
 

@@ -41,7 +41,8 @@ fun NavGraphBuilder.medicationReminders(navController: NavController) {
     }
 
     composable(MedicationReminderScreens.AddMedicationReminder.route) {
-        EditMedicationReminderScreen(onBackClick = { navController.navigateUp() })
+        EditMedicationReminderScreen(
+            onBackClick = { navController.navigateUp() })
     }
 
     composable(

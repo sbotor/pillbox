@@ -15,7 +15,7 @@ class MedicationReminder {
     var nextDeliveryTimestamp: Long? = null
     var days = DayOfWeekMask()
 
-    // TODO: A service checking if delivery problems occured would be nice
+    // TODO: A service checking if delivery problems occurred would be nice
     val isEnabled
         get() = nextDeliveryTimestamp != null
 

@@ -33,8 +33,8 @@ abstract class ReminderHistoryDao {
     @Query("SELECT * FROM ReminderHistoryEntryData ORDER BY deliveredTimestamp DESC LIMIT :amount")
     abstract suspend fun getNewest(amount: Int): List<ReminderHistoryEntry>
 
-    @Query("SELECT * FROM ReminderHistoryEntryData")
     @Transaction
+    @Query("SELECT * FROM ReminderHistoryEntryData")
     abstract suspend fun getAll(): List<ReminderHistoryEntry>
 
     @Query("UPDATE ReminderHistoryEntryData SET wasViewed = 1 WHERE id = :id")
@@ -43,6 +43,7 @@ abstract class ReminderHistoryDao {
     @Query("UPDATE ReminderHistoryEntryData SET isConfirmed = :value WHERE id = :id")
     abstract suspend fun markConfirmation(id: Int, value: Boolean)
 
+    @Transaction
     @Query("SELECT * FROM ReminderHistoryEntryData WHERE id = :id")
     abstract suspend fun get(id: Int): ReminderHistoryEntry?
 }

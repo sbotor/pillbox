@@ -1,6 +1,7 @@
 package com.sbcf.pillbox.features.medicationreminders.data.repositories
 
 import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderWithMedications
 import com.sbcf.pillbox.features.medicationreminders.models.MedicationReminderOverview
 import javax.inject.Inject
 
@@ -30,4 +31,12 @@ class MedicationRemindersRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteById(id: Int) = dao.delete(id)
+    override suspend fun getReminderWithMedications(id: Int): ReminderWithMedications? =
+        dao.getReminderWithMedications(id)
+
+    override suspend fun updateReminderWithMedications(rem: ReminderWithMedications) =
+        dao.updateReminderWithMedications(rem)
+
+    override suspend fun addReminderWithMedications(rem: ReminderWithMedications): Int =
+        dao.addReminderWithMedications(rem)
 }

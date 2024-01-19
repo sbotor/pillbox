@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sbcf.pillbox.features.reminderhistory.data.ReminderHistoryItem
 import com.sbcf.pillbox.features.reminderhistory.data.repositories.ReminderHistoryRepository
 import com.sbcf.pillbox.utils.Clock
 import com.sbcf.pillbox.utils.DisplayFormatter
@@ -29,7 +30,7 @@ class ReminderHistoryEntryViewModel @Inject constructor(
         private set
     var formattedDeliveryTime by mutableStateOf("")
         private set
-    var items by mutableStateOf(emptyList<String>())
+    var items by mutableStateOf(emptyList<ReminderHistoryItem>())
         private set
 
     suspend fun fetchEntryAndMarkAsViewed(id: Int) {
@@ -46,7 +47,7 @@ class ReminderHistoryEntryViewModel @Inject constructor(
         formattedDeliveryDate = formatter.dayOfWeekAndFullDate(cal)
         formattedDeliveryTime = formatter.time(cal)
 
-        items = entry.items.sortedBy { it.ordinal }.map { it.description }.toList()
+        items = entry.items.sortedBy { it.ordinal }
     }
 
     fun toggleConfirmation() {

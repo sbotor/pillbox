@@ -1,6 +1,5 @@
-package com.sbcf.pillbox.features.reminderhistory.views
+package com.sbcf.pillbox.features.reminderhistory.screens
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sbcf.pillbox.R
 import com.sbcf.pillbox.components.ListItemSpacer
+import com.sbcf.pillbox.features.medicationreminders.components.ReminderMedicationListItem
 import com.sbcf.pillbox.features.reminderhistory.viewmodels.ReminderHistoryEntryViewModel
 import com.sbcf.pillbox.utils.Dimens
 import com.sbcf.pillbox.utils.Modifiers.scaffoldedContent
@@ -61,66 +60,72 @@ fun ReminderHistoryEntryScreen(
             },
         )
     }) { padding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .scaffoldedContent(padding)
                 .padding(horizontal = Dimens.PaddingNormal),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = vm.formattedDeliveryDate,
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = vm.formattedDeliveryTime,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Center
-            )
-            if (vm.description.isNotEmpty()) {
+            item {
                 Text(
-                    text = vm.description,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = Dimens.PaddingNormal),
+                    text = vm.formattedDeliveryDate,
+                    style = MaterialTheme.typography.headlineSmall,
                     textAlign = TextAlign.Center
                 )
             }
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.PaddingNormal)
-            ) {
-                Row(
+            item {
+                Text(
+                    text = vm.formattedDeliveryTime,
+                    style = MaterialTheme.typography.headlineMedium,
+                    textAlign = TextAlign.Center
+                )
+            }
+            if (vm.description.isNotEmpty()) {
+                item {
+                    Text(
+                        text = vm.description,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = Dimens.PaddingNormal),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+            item {
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(Dimens.PaddingNormal),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(Dimens.PaddingNormal)
                 ) {
-                    Text(text = stringResource(id = R.string.reminder_history_confirm))
-                    Switch(checked = vm.isConfirmed, onCheckedChange = { vm.toggleConfirmation() })
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(Dimens.PaddingNormal),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(text = stringResource(id = R.string.reminder_history_confirm))
+                        Switch(
+                            checked = vm.isConfirmed,
+                            onCheckedChange = { vm.toggleConfirmation() })
+                    }
                 }
             }
             if (vm.items.isNotEmpty()) {
-                Text(
-                    text = stringResource(id = R.string.reminder_history_medications),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(top = Dimens.PaddingLarge)
-                )
-                LazyColumn {
-                    items(vm.items) {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(Dimens.PaddingNormal),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surface,
-                            ),
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                        ) {
-                            Text(text = it, modifier = Modifier.padding(Dimens.PaddingLarge))
+                item {
+                    Text(
+                        text = stringResource(id = R.string.reminder_history_medications),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.padding(top = Dimens.PaddingLarge)
+                    )
+                }
+                item {
+                    Column {
+                        for (item in vm.items) {
+                            ReminderMedicationListItem(
+                                name = item.description,
+                                dosage = "${item.dosageAmount} ${item.dosageUnit}"
+                            )
                         }
-                        ListItemSpacer()
                     }
                 }
             }
