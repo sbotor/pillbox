@@ -118,7 +118,7 @@ fun HomeScreen(
                             verticalArrangement = Arrangement.Center,
                         ) {
                             Text(
-                                text = "Jesteś na bieżąco", //TODO: stringXML
+                                text = stringResource(id = R.string.up_to_date),
                                 style = MaterialTheme.typography.headlineSmall,
                                 textAlign = TextAlign.Center
                             )
@@ -137,7 +137,9 @@ fun HomeScreen(
                         .padding(horizontal = 40.dp),
                 ) {
                     Text(
-                        text = if (vm.history.isEmpty()) "Pokaż historię" else "Pokaż więcej",//TODO: stringXML
+                        text = 
+                        if (vm.history.isEmpty()) stringResource(id = R.string.show_history)
+                        else stringResource(id = R.string.show_more),
                         fontSize = 20.sp
                     )
                 }
