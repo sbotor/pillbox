@@ -33,6 +33,9 @@ abstract class ReminderHistoryDao {
     @Query("SELECT * FROM ReminderHistoryEntryData ORDER BY deliveredTimestamp DESC LIMIT :amount")
     abstract suspend fun getNewest(amount: Int): List<ReminderHistoryEntry>
 
+    @Query("SELECT * FROM ReminderHistoryEntryData WHERE isConfirmed IS 0 ORDER BY deliveredTimestamp DESC LIMIT :amount")
+    abstract suspend fun getNewestUnchecked(amount: Int): List<ReminderHistoryEntry>
+
     @Transaction
     @Query("SELECT * FROM ReminderHistoryEntryData")
     abstract suspend fun getAll(): List<ReminderHistoryEntry>
