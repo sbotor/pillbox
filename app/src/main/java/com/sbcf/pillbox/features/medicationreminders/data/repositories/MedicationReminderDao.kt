@@ -1,7 +1,6 @@
 package com.sbcf.pillbox.features.medicationreminders.data.repositories
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -19,7 +18,7 @@ abstract class MedicationReminderDao {
     abstract suspend fun getAllEnabled(): List<MedicationReminder>
 
     @Query("SELECT * FROM MedicationReminder WHERE nextDeliveryTimestamp IS NOT null ORDER BY nextDeliveryTimestamp LIMIT 1")
-    abstract suspend fun getNextEnabled(): MedicationReminder?
+    abstract suspend fun getNextEnabled(): ReminderWithMedications?
 
     @Update
     abstract suspend fun updateMany(reminders: List<MedicationReminder>)

@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -16,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.sbcf.pillbox.R
-import com.sbcf.pillbox.features.medicationreminders.data.MedicationReminder
+import com.sbcf.pillbox.features.medicationreminders.data.ReminderWithMedications
 import com.sbcf.pillbox.utils.Dimens
 
 @Composable
 fun NextMedicationReminderItem(
-    reminder: MedicationReminder?,
+    remMed: ReminderWithMedications?,
     onClick: () -> Unit,
     modifier: Modifier,
     datetimeFormatter: (Long?) -> String
@@ -31,7 +30,7 @@ fun NextMedicationReminderItem(
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
-        if (reminder == null) {
+        if (remMed == null) {
             Column(
                 modifier = Modifier
                     .padding(Dimens.PaddingNormal),
@@ -50,14 +49,14 @@ fun NextMedicationReminderItem(
                     .padding(Dimens.PaddingNormal)
             ) {
                 Text(
-                    text = datetimeFormatter(reminder.nextDeliveryTimestamp),
+                    text = datetimeFormatter(remMed.reminder.nextDeliveryTimestamp),
                     style = MaterialTheme.typography.headlineSmall,
                 )
             }
 
-            if (reminder.title.isNotEmpty()) {
+            if (remMed.reminder.title.isNotEmpty()) {
                 Text(
-                    text = reminder.title,
+                    text = remMed.reminder.title,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(
                         start = Dimens.PaddingNormal,
@@ -69,7 +68,7 @@ fun NextMedicationReminderItem(
 
             Row {
                 Text(
-                    text = "TODO: Tutaj mała lista leków.",
+                    text = remMed.medications.joinToString(transform = { it.name }),
                     modifier = Modifier.padding(
                         start = Dimens.PaddingNormal,
                         end = Dimens.PaddingNormal,
