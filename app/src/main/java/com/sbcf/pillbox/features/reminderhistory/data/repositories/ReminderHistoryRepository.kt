@@ -8,5 +8,6 @@ interface ReminderHistoryRepository {
     suspend fun markAsViewed(id: Int)
     suspend fun markConfirmation(id: Int, value: Boolean)
     suspend fun get(id: Int): ReminderHistoryEntry?
-    suspend fun getNewest(amount: Int) : List<ReminderHistoryEntry>
+    suspend fun getNewest(amount: Int): List<ReminderHistoryEntry>
+    suspend fun getNewestUnconfirmed(amount: Int): List<ReminderHistoryEntry>
 }

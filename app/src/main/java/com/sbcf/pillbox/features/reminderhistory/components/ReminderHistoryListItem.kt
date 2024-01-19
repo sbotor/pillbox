@@ -3,7 +3,6 @@ package com.sbcf.pillbox.features.reminderhistory.components
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -24,11 +23,11 @@ import com.sbcf.pillbox.utils.Dimens
 fun ReminderHistoryListItem(
     reminder: ReminderHistoryEntry,
     onClick: (id: Int) -> Unit,
-    formatted: (Long) -> String
+    datetimeFormatter: (Long) -> String,
+    modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
             .clickable { onClick(reminder.data.id) },
         border =
             if (!reminder.data.isConfirmed) BorderStroke(1.dp, MaterialTheme.colorScheme.error)
@@ -36,12 +35,12 @@ fun ReminderHistoryListItem(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(Dimens.PaddingNormal)
         ) {
 
             Text(
-                text = formatted(reminder.data.deliveredTimestamp),
+                text = datetimeFormatter(reminder.data.deliveredTimestamp),
                 style = MaterialTheme.typography.headlineMedium,
                 fontWeight = if (!reminder.data.wasViewed) FontWeight.Bold else FontWeight.Normal
             )

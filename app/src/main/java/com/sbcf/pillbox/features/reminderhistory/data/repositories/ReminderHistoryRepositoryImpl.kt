@@ -11,4 +11,6 @@ class ReminderHistoryRepositoryImpl @Inject constructor(private val dao: Reminde
     override suspend fun markConfirmation(id: Int, value: Boolean) = dao.markConfirmation(id, value)
     override suspend fun get(id: Int): ReminderHistoryEntry? = dao.get(id)
     override suspend fun getNewest(amount: Int): List<ReminderHistoryEntry> = dao.getNewest(amount)
+    override suspend fun getNewestUnconfirmed(amount: Int): List<ReminderHistoryEntry> =
+        dao.getNewestUnchecked(amount)
 }
