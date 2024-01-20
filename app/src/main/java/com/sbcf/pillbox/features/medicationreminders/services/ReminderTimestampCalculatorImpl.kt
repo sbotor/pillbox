@@ -54,10 +54,10 @@ class ReminderTimestampCalculatorImpl @Inject constructor(private val clock: Clo
         }
 
         if (info.days.isNotEmpty()) {
-            return null
+            return getRepeatingNextDayTimestamp(info, now)
         }
 
-        return getRepeatingNextDayTimestamp(info, now)
+        return null;
     }
 
     private fun getRepeatingNextDayTimestamp(info: TimestampInfo, now: Calendar): Long? {
